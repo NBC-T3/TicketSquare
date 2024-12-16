@@ -113,8 +113,8 @@ class APIManager {
     
     /// 이미지 가져오기
     /// response -> id에 해당하는 이미지 data
-    func fetchMovieImages(movieId: Int, completion: @escaping (Data?, Error?) -> Void) {
-        let url = "https://api.themoviedb.org/3/movie/\(movieId)/images"
+    func fetchMovieImages(movieID: Int, completion: @escaping (Data?, Error?) -> Void) {
+        let url = "https://api.themoviedb.org/3/movie/\(movieID)/images"
         print(url)
         AF.request(url, method: .get, headers: headers)
             .validate()
@@ -130,9 +130,9 @@ class APIManager {
     
     /// 영화 세부 정보 가져오기
     /// response -> tittle, overview, releaseDate, runtime, genres array( id, name)
-    func fetchMovieDetails(movieId: Int, completion: @escaping (MovieDetails?, Error?) -> Void) {
+    func fetchMovieDetails(movieID: Int, completion: @escaping (MovieDetails?, Error?) -> Void) {
         
-        let url = "\(baseURL)/movie/\(movieId)"
+        let url = "\(baseURL)/movie/\(movieID)"
         AF.request(url, method: .get, headers: headers)
             .validate()
             .responseDecodable(of: MovieDetails.self) { response in
@@ -148,13 +148,13 @@ class APIManager {
     /// 영화 키워드 목록 가져오기
     /// fetchKeywordsMovies(5353)
     /// response -> 키워드의 id와 키워드들 담은 array
-    func fetchKeywordsMovies(movieId: Int, _ completion: @escaping ([Keyword]?, Error?) -> Void) {
+    func fetchKeywordsMovies(movieID: Int, _ completion: @escaping ([Keyword]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
             "language": "en-US"
         ]
         
-        let url = "\(baseURL)/movie/\(movieId)/keywords"
+        let url = "\(baseURL)/movie/\(movieID)/keywords"
     
         AF.request(url, method: .get, parameters: parameters, headers: headers)
             .validate()
