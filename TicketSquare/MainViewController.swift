@@ -179,12 +179,24 @@ extension MainViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PagingImageCell.identifier, for: indexPath) as! PagingImageCell
             let urlString = bigImageURLs[indexPath.item] // 큰 이미지 URL 가져오기
             cell.configure(with: urlString) // 셀에 이미지 설정
+            
+            // 버튼 클릭 이벤트 설정
+            cell.buttonAction = {
+                print("큰 이미지 \(indexPath.item + 1) 클릭됨")
+            }
+            
             return cell
         } else {
             // 작은 이미지 셀 구성
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SmallImageCell.identifier, for: indexPath) as! SmallImageCell
             let urlString = smallImageURLs[indexPath.item] // 작은 이미지 URL 가져오기
             cell.configure(with: urlString) // 셀에 이미지 설정
+            
+            // 버튼 클릭 이벤트 설정
+            cell.buttonAction = {
+                print("작은 이미지 \(indexPath.item + 1) 클릭됨")
+            }
+            
             return cell
         }
     }

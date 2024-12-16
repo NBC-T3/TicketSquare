@@ -23,17 +23,32 @@ class SmallImageCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let button: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        return button
+    }()
+    
+    var buttonAction: (() -> Void)?
+    
     // 셀 초기화 메서드
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         // 셀의 contentView에 imageView 추가
         contentView.addSubview(imageView)
+        contentView.addSubview(button)
         
         // 이미지 뷰 레이아웃 설정
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        button.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     // 스토리보드 사용 시 호출되는 초기화 메서드
     required init?(coder: NSCoder) {
@@ -75,5 +90,9 @@ class SmallImageCell: UICollectionViewCell {
                 self.imageView.image = image
             }
         }.resume()
+    }
+    
+    @objc private func buttonTapped() {
+        buttonAction?()
     }
 }

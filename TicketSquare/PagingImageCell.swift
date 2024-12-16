@@ -23,17 +23,35 @@ class PagingImageCell: UICollectionViewCell {
         return imageView
     }()
     
+    // 버튼 클릭 이벤트 처리
+    private let button: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        return button
+    }()
+    
+    var buttonAction: (() -> Void)?
+    
+    
     // 셀 초기화 메서드
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         // 셀의 contentView에 imageView를 추가
         contentView.addSubview(imageView)
+        contentView.addSubview(button)
         
         // 이미지 뷰 레이아웃 설정
         imageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        button.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // 버튼 액션 추가
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     // 초기화 메서드 : 스토리보드 사용 시 호출되나 현재 코드에서는 fatalError 처리
@@ -77,5 +95,9 @@ class PagingImageCell: UICollectionViewCell {
                 self.imageView.image = image
             }
         }.resume()
+    }
+    
+    @objc private func buttonTapped() {
+        buttonAction?() // 버튼이 눌리면 외부로 이벤트 전달
     }
 }
