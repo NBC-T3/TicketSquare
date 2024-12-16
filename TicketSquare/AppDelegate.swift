@@ -10,12 +10,15 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        APIManager.shared.fetchNowPlayingMovies(page: 1) { result, error in
+            print(result)
+        }
         // Override point for customization after application launch.
         return true
     }
+    
 
     // MARK: UISceneSession Lifecycle
 
