@@ -117,11 +117,14 @@ class Join: UIViewController {
     //회원가입 완료 후 메인페이지로 이동하는 Alert
     @objc
     private func joinBtnTapped() {
-            let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
-            let done = UIAlertAction(title: "확인", style: .default, handler: nil)
-            
-            alert.addAction(done)
-            present(alert, animated: true)
+        let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
+        let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            let mainView = ViewController()
+            mainView.modalPresentationStyle = .fullScreen
+            self?.present(mainView, animated: true, completion: nil)
         }
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
     
 }
