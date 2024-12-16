@@ -11,6 +11,7 @@ import Then
 
 class Login: UIViewController {
     
+    //MARK: 각 요소들의 속성 부분
     private let loginLabel: UILabel = UILabel().then {
         $0.text = "티켓스퀘어 ID 로그인"
         $0.textAlignment = .left
@@ -52,7 +53,7 @@ class Login: UIViewController {
     }
     
     
-    
+    //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
         view.backgroundColor = .black
         
@@ -60,16 +61,13 @@ class Login: UIViewController {
         loginLabel.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(200)
-            
         }
-        
         view.addSubview(ID)
         ID.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.top.equalTo(loginLabel.snp.bottom)
             $0.height.equalTo(50)
         }
-        
         view.addSubview(password)
         password.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
@@ -89,6 +87,7 @@ class Login: UIViewController {
         }
     }
     
+    //회원가입 버튼이 눌렸을 때
     @objc
     private func joinBtnTapped() {
         self.navigationController?.pushViewController(Join(), animated: true)
