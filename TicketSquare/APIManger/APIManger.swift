@@ -12,7 +12,6 @@ class APIManager {
     static let shared = APIManager()
     
     private let baseURL = "https://api.themoviedb.org/3"
-    private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     private let APIKey = Bundle.main.infoDictionary?["APIKey"] as! String
     
     private lazy var headers: HTTPHeaders = [
