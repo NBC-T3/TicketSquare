@@ -9,6 +9,13 @@ import UIKit
 import SnapKit
 import Then
 
-class Join {
+class Join: UIViewController {
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
     
 }
