@@ -47,6 +47,7 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
             $0.center.size.equalToSuperview()
         }
         
+        backgroundColor = .white
         clipsToBounds = true
         layer.cornerRadius = 10
         layer.borderColor = UIColor.black.cgColor

@@ -27,7 +27,7 @@ class TicketingStepper: UIView {
         let label = UILabel()
         
         label.text = "Title"
-        label.font = .systemFont(ofSize: 25, weight: .bold)
+        label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textAlignment = .left
         
         return label
@@ -97,6 +97,9 @@ class TicketingStepper: UIView {
     
     // 전체 UI 설정
     private func configureUI() {
+        
+        backgroundColor = .clear
+        
         [
             titleLabel,
             stepperlStackView
@@ -135,9 +138,14 @@ class TicketingStepper: UIView {
         
     }
 
-    // (외부 설정 메서드) 타이틀 설정
+    /// (외부 설정 메서드) 타이틀 설정
     func setTitle(_ title: String) {
         self.titleLabel.text = title
+    }
+    
+    /// (외부 설정 메서드) 배경 색상 설정
+    func setColor(_ color: UIColor) {
+        self.stepperlStackView.backgroundColor = color
     }
     
 }
@@ -150,6 +158,7 @@ extension TicketingStepper {
     private func stepperButton(_ type: StepperButtonType) -> UIButton {
         let button = UIButton()
         button.setImage(type.title, for: .normal)
+//        button.setTitleColor(.red, for: .highlighted)
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = .white
         button.backgroundColor = .clear
