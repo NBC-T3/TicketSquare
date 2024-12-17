@@ -64,9 +64,9 @@ class MovieDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMovieDetails()
         configureUI()
         layoutUI()
+        fetchMovieDetails()
     }
     
     // MARK: - UI 배치
@@ -136,7 +136,6 @@ class MovieDetailViewController: UIViewController {
             print("Selected Movie ID: \(movieID)")
             
             self.fetchDetails(for: movieID)
-            self.fetchImages(for: movieID)
         }
     }
     
@@ -152,19 +151,19 @@ class MovieDetailViewController: UIViewController {
                 self.overviewLabel.text = details.overview
                 self.runtimeLabel.text = "Runtime: \(details.runtime) minutes"
                 self.genresLabel.text = "Genres: \(details.genres.map { $0.name }.joined(separator: ", "))"
-            }
-        }
-    }
-    
-    private func fetchImages(for movieID: Int) {
-        APIManager.shared.fetchMovieImages(movieID: movieID) { [weak self] data, error in
-            guard let self = self, let data = data, error == nil else {
-                print("Error fetching movie poster: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.posterImageView.image = UIImage(data: data)
+                
+                // posterPath를 사용해 이미지 다운로드 및 설정
+                if let posterPath = details.posterPath {
+                    APIManager.shared.fetchImage(from: posterPath) { image in
+                        if let image = image {
+                            DispatchQueue.main.async {
+                                self.posterImageView.image = image
+                            }
+                        } else {
+                            print("Failed to load poster image")
+                        }
+                    }
+                }
             }
         }
     }
