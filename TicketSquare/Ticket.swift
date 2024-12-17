@@ -36,6 +36,7 @@ struct Ticket {
             numberOfPeople.subtractAdult()
         case .adult(.update(let numberOfAdult)):
             numberOfPeople.updateAdult(numberOfAdult)
+            
         case .minor(.add):
             numberOfPeople.addMinor()
         case .minor(.subtract):

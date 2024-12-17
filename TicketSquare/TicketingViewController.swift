@@ -26,12 +26,14 @@ final class TicketingViewController: UIViewController {
         return scrollView
     }()
     
-    //
+    // 
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
+        datePicker.timeZone = .autoupdatingCurrent
+        datePicker.addTarget(nil, action: #selector(datePickerValueChanged), for: .valueChanged)
         
         return datePicker
     }()
@@ -50,6 +52,22 @@ final class TicketingViewController: UIViewController {
     }()
     
     
+    private let stackVerticalView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.backgroundColor = .clear
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 5
+        
+        return stackView
+    }()
+    
+    private let stepper: UIStepper = {
+        let stepper = UIStepper()
+        stepper.backgroundColor = .yellow
+        return stepper
+    }()
+    
     private var date: Date {
         datePicker.date
     }
@@ -59,6 +77,10 @@ final class TicketingViewController: UIViewController {
         
         configureUI()
         configureCollectionView()
+        view.addSubview(stepper)
+        stepper.snp.makeConstraints {
+            $0.centerX.bottom.equalToSuperview()
+        }
     }
     
     
@@ -94,9 +116,11 @@ extension TicketingViewController {
 
 extension TicketingViewController {
     
+    // TODO: - 날짜 선택에 따라 시간 데이터 액션 필요
     @objc
-    private func updateDate(_ sender: UIDatePicker) {
-        
+    private func datePickerValueChanged(_ sender: UIDatePicker) {
+        let date = sender.date
+        ticketingDate = Ticket.TicketingDate(from: date)
     }
     
 }
@@ -134,9 +158,9 @@ extension TicketingViewController: UICollectionViewDataSource {
 extension TicketingViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else {
-            return false }
+            return false
+        }
         
         guard !cell.isSelected else {
             collectionView.deselectItem(at: indexPath,
@@ -152,12 +176,15 @@ extension TicketingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell,
               let time = cell.didSelected() else { return }
-        
         ticketingTime = time
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else { return }
         cell.didDeselected()
+        ticketingTime = nil
     }
 }
+
+
+// MARK: -
