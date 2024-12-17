@@ -123,10 +123,13 @@ extension Ticket {
         }
         // 성인 -1
         mutating func subtractAdult() {
+            guard adult > 0 else { return }
+
             self.adult -= 1
         }
         // 성인 인원 수 업데이트
         mutating func updateAdult(_ numberOfAdults: Int) {
+            guard numberOfAdults >= 0 else { return }
             self.adult = numberOfAdults
         }
         
@@ -136,11 +139,13 @@ extension Ticket {
         }
         // 미성년자 -1
         mutating func subtractMinor() {
+            guard minor > 0 else { return }
             self.minor -= 1
         }
         // 미성년자 인원 수 업데이트
-        mutating func updateMinor(_ numberOfMinor: Int) {
-            self.minor = numberOfMinor
+        mutating func updateMinor(_ numberOfMinors: Int) {
+            guard numberOfMinors >= 0 else { return }
+            self.minor = numberOfMinors
         }
         
     }
