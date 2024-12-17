@@ -12,6 +12,7 @@ class APIManager {
     static let shared = APIManager()
     
     private let baseURL = "https://api.themoviedb.org/3"
+    private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     private let APIKey = Bundle.main.infoDictionary?["APIKey"] as! String
     
     
@@ -112,21 +113,31 @@ class APIManager {
             }
     }
     
-    /// 이미지 가져오기
-    /// response -> id에 해당하는 이미지 data
-    func fetchMovieImages(movieID: Int, completion: @escaping (Data?, Error?) -> Void) {
-        let url = "https://api.themoviedb.org/3/movie/\(movieID)/images"
-        print(url)
-        AF.request(url, method: .get, headers: headers)
-            .validate()
-            .responseData { response in
-                switch response.result {
-                case .success(let data):
-                    completion(data, nil)
-                case .failure(let error):
-                    completion(nil, error)
+    // MARK: - 이미지 URL 생성 메서드
+    /// posterPath를 사용해 전체 이미지 URL 반환
+    func getImageURL(for posterPath: String) -> String {
+        return "\(imageBaseURL)\(posterPath)"
+    }
+    
+    // MARK: - 이미지 데이터 다운로드 메서드
+    /// 이미지 URL로부터 이미지 데이터를 가져옴
+    func fetchImage(from posterPath: String, completion: @escaping (UIImage?) -> Void) {
+        let imageURL = getImageURL(for: posterPath)
+        
+        AF.request(imageURL).responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let image = UIImage(data: data) {
+                    completion(image)
+                } else {
+                    print("Error: Invalid image data")
+                    completion(nil)
                 }
+            case .failure(let error):
+                print("Error fetching image: \(error.localizedDescription)")
+                completion(nil)
             }
+        }
     }
     
     /// 영화 세부 정보 가져오기
