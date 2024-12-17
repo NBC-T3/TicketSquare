@@ -11,7 +11,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+    
         // Override point for customization after application launch.
         
         //런치스크린 딜레이 설정. 몇초동안 보여줄지 설정 가능함
