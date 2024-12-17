@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // UIWindow 설정
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = MainViewController() // MainViewController를 Root로 설정
+        window?.rootViewController = TicketingViewController() // MainViewController를 Root로 설정
         window?.makeKeyAndVisible()
     }
 }

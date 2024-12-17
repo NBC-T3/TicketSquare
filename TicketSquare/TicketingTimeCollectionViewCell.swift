@@ -61,12 +61,14 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
     }
     
     func didSelected() -> Ticket.TicketcingTime? {
-        self.backgroundColor = .systemBlue
+        backgroundColor = .systemBlue
+        timeLabel.textColor = .white
         return self.time
     }
-
     
     func didDeselected() {
-        self.backgroundColor = .white
+        backgroundColor = .white
+        timeLabel.textColor = .black
+
     }
 }
