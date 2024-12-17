@@ -11,6 +11,7 @@ import Then
 
 class Join: UIViewController {
     
+    //MARK: 각 요소들의 속성 부분
     private let joinLabel: UILabel = UILabel().then {
         $0.text = "티켓스퀘어 회원가입"
         $0.textAlignment = .center
@@ -38,7 +39,7 @@ class Join: UIViewController {
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
     }
-    private let ID: UITextField = UITextField().then {
+    private let id: UITextField = UITextField().then {
         $0.text = " 아이디를 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
@@ -68,6 +69,7 @@ class Join: UIViewController {
     }
     
     
+    //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
         
         view.addSubview(joinLabel)
@@ -93,8 +95,8 @@ class Join: UIViewController {
             $0.top.equalTo(birth.snp.bottom).offset(15)
             $0.height.equalTo(40)
         }
-        view.addSubview(ID)
-        ID.snp.makeConstraints {
+        view.addSubview(id)
+        id.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.top.equalTo(phoneNumber.snp.bottom).offset(15)
             $0.height.equalTo(40)
@@ -102,7 +104,7 @@ class Join: UIViewController {
         view.addSubview(password)
         password.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.top.equalTo(ID.snp.bottom).offset(15)
+            $0.top.equalTo(id.snp.bottom).offset(15)
             $0.height.equalTo(40)
         }
         view.addSubview(joinBtn)
@@ -119,7 +121,7 @@ class Join: UIViewController {
     private func joinBtnTapped() {
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            let mainView = ViewController()
+            let mainView = MainViewController()
             mainView.modalPresentationStyle = .fullScreen
             self?.present(mainView, animated: true, completion: nil)
         }

@@ -18,7 +18,7 @@ class Login: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 30)
         $0.textColor = .white
     }
-    private let ID: UITextField = UITextField().then {
+    private let id: UITextField = UITextField().then {
         $0.text = " 아이디"
         $0.font = UIFont.systemFont(ofSize: 25)
         $0.backgroundColor = .gray
@@ -62,8 +62,8 @@ class Login: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(200)
         }
-        view.addSubview(ID)
-        ID.snp.makeConstraints {
+        view.addSubview(id)
+        id.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.top.equalTo(loginLabel.snp.bottom)
             $0.height.equalTo(50)
@@ -71,7 +71,7 @@ class Login: UIViewController {
         view.addSubview(password)
         password.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.top.equalTo(ID.snp.bottom).offset(10)
+            $0.top.equalTo(id.snp.bottom).offset(10)
             $0.height.equalTo(50)
         }
         view.addSubview(loginBtn)
