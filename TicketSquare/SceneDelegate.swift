@@ -12,18 +12,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        //UIWindowScene 객체 생성.
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
-        let window = UIWindow(windowScene: windowScene)
-                
-        //window에게 루트 뷰 컨트롤러 지정.
-        window.rootViewController = UINavigationController(rootViewController: Login())
-        //이 메서드를 반드시 작성해줘야만 윈도우가 활성화 됨
-        window.makeKeyAndVisible()
-                
-        self.window = window
+        
+        // UIWindow 설정
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = MainViewController() // MainViewController를 Root로 설정
+        window?.makeKeyAndVisible()
     }
+}
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -53,6 +49,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-  
-}
+
 
