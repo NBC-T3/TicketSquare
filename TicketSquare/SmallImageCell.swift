@@ -23,6 +23,22 @@ class SmallImageCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let movieTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textColor = .white
+        label.text = "Movie Title" // 임시 텍스트
+        return label
+    }()
+    
+    private let genreLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .lightGray
+        label.text = "Genre" // 임시 텍스트
+        return label
+    }()
+    
     private let button: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
@@ -38,14 +54,26 @@ class SmallImageCell: UICollectionViewCell {
         // 셀의 contentView에 imageView 추가
         contentView.addSubview(imageView)
         contentView.addSubview(button)
+        contentView.addSubview(movieTitleLabel)
+        contentView.addSubview(genreLabel)
         
         // 이미지 뷰 레이아웃 설정
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        movieTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(imageView.snp.bottom).offset(5)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        genreLabel.snp.makeConstraints {
+            $0.top.equalTo(movieTitleLabel.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        button.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)

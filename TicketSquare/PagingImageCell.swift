@@ -46,8 +46,8 @@ class PagingImageCell: UICollectionViewCell {
             $0.edges.equalToSuperview()
         }
         
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        button.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
         // 버튼 액션 추가
