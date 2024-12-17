@@ -11,10 +11,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         //UIWindowScene 객체 생성.
         guard let windowScene = (scene as? UIWindowScene) else { return }
+
         let window = UIWindow(windowScene: windowScene)
                 
         //window에게 루트 뷰 컨트롤러 지정.
@@ -53,6 +53,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
+  
 }
 
