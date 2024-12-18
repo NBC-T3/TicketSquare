@@ -10,9 +10,10 @@ import SnapKit
 
 final class TicketingViewController: UIViewController {
     
-    private var timeDatas: [Ticket.TicketcingTime] = MockData.ticketTimes
+    private var timeDatas: [Ticket.TicketcingTime] = []
     
-    private var date: Date { datePicker.date }
+    private var movieDetail: MovieDetails?
+    
     private var ticketingDate: Ticket.TicketingDate = .init(from: Date.now)
     private var ticketingTime: Ticket.TicketcingTime? = nil
     private var numberOfPeople: Ticket.NumberOfPeople = Ticket.NumberOfPeople()
@@ -38,14 +39,16 @@ final class TicketingViewController: UIViewController {
         return scrollView
     }()
     
-    //
-    private let datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
         datePicker.timeZone = .autoupdatingCurrent
-        datePicker.addTarget(nil,
+        datePicker.tintColor = .red.withAlphaComponent(0.6)
+        datePicker.overrideUserInterfaceStyle = .dark
+
+        datePicker.addTarget(self,
                              action: #selector(datePickerValueChanged),
                              for: .valueChanged)
         
@@ -62,6 +65,7 @@ final class TicketingViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero,
                                               collectionViewLayout: flowLayout)
         
+        collectionView.backgroundColor = .black
         collectionView.isScrollEnabled = false
         collectionView.allowsMultipleSelection = false
         
@@ -87,16 +91,22 @@ final class TicketingViewController: UIViewController {
         return stackView
     }()
     
+    private var isSet: Bool {
+        ticketingTime != nil && numberOfPeople.totalPrice != 0
+    }
+    
     private lazy var adultStepper: TicketingStepper = {
         let stepper = TicketingStepper()
         stepper.setColor(.lightGray)
-        stepper.setTitle("어른")
+        stepper.setTitle("일반")
         
         stepper.onDecreaseButton = { [weak self] in
             self?.numberOfPeople.subtractAdult()
+            self?.updateFooter()
         }
         stepper.onIncreaseButton = { [weak self] in
             self?.numberOfPeople.addAdult()
+            self?.updateFooter()
         }
         
         return stepper
@@ -109,17 +119,32 @@ final class TicketingViewController: UIViewController {
         
         stepper.onDecreaseButton = { [weak self] in
             self?.numberOfPeople.subtractMinor()
+            self?.updateFooter()
         }
         
         stepper.onIncreaseButton = { [weak self] in
             self?.numberOfPeople.addMinor()
+            self?.updateFooter()
         }
         
         return stepper
     }()
     
-    private let priceLabelStackView: UIStackView = {
+    private let footerView: UIStackView = {
         let stackView = UIStackView()
+        
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.spacing = 25
+        
+        return stackView
+    }()
+    
+    private let priceStackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
         
         return stackView
     }()
@@ -127,8 +152,21 @@ final class TicketingViewController: UIViewController {
     private let totalPriceLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "최종금액: 10000 원"
-        label.font = .systemFont(ofSize: 20)
+        label.text = "총 금액"
+
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
+        
+        return label
+    }()
+    
+    private let priceLabel: UILabel = {
+        let label = UILabel()
+        
+        label.text = PriceFormatter.won(0)
+        
+        label.textAlignment = .right
+        label.font = .systemFont(ofSize: 25, weight: .semibold)
         
         return label
     }()
@@ -138,23 +176,41 @@ final class TicketingViewController: UIViewController {
         
         button.setTitle("결제하기", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.white.withAlphaComponent(0.4), for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 25)
-        button.backgroundColor = .darkGray
-        button.layer.cornerRadius = 20
+        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = 16
+        button.titleLabel?.isHidden = false
+        button.isEnabled = false
         
         return button
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
         configureCollectionView()
+        setUpTimeDatas()
+    }
+    
+    private func updateFooter() {
+        updatePrice()
+        updatePaymentButton()
     }
     
     private func updatePrice() {
+        priceLabel.text = PriceFormatter.won(self.numberOfPeople.totalPrice)
+    }
+    
+    private func updatePaymentButton() {
+        paymentButton.isEnabled = isSet
         
+        if paymentButton.isEnabled {
+            paymentButton.backgroundColor = .darkGray
+        } else {
+            paymentButton.backgroundColor = .lightGray
+        }
     }
     
 }
@@ -165,12 +221,12 @@ final class TicketingViewController: UIViewController {
 extension TicketingViewController {
     
     private func configureUI() {
-        
+        view.backgroundColor = .black
         
         [
             headerLabel,
             scrollView,
-            paymentButton
+            footerView
         ].forEach { view.addSubview($0)}
         
         [
@@ -184,8 +240,17 @@ extension TicketingViewController {
             minorStepper
         ].forEach { stepperStackView.addArrangedSubview($0) }
         
-        let numbersOfLine = ((timeDatas.count - 1) / 4) + 1
-        let collectionViewHeight = CGFloat(numbersOfLine * 50 + (numbersOfLine - 1) * 10)
+        [
+            priceStackView,
+            paymentButton
+        ].forEach { footerView.addArrangedSubview($0) }
+        
+        [
+            
+            totalPriceLabel,
+            priceLabel
+        ].forEach { priceStackView.addArrangedSubview($0) }
+        
         
         headerLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).inset(0)
@@ -193,16 +258,16 @@ extension TicketingViewController {
             $0.height.equalTo(80)
         }
         
-        paymentButton.snp.makeConstraints {
+        footerView.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(50)
+            $0.height.equalTo(100)
         }
         
         scrollView.snp.makeConstraints {
             $0.top.equalTo(headerLabel.snp.bottom).offset(40)
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.bottom.equalTo(paymentButton.snp.top).offset(-10)
+            $0.bottom.equalTo(footerView.snp.top).offset(-10)
         }
         
         datePicker.snp.makeConstraints {
@@ -216,11 +281,10 @@ extension TicketingViewController {
             $0.top.equalTo(datePicker.snp.bottom).offset(80)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(collectionViewHeight)
         }
         
         stepperStackView.snp.makeConstraints {
-            $0.top.equalTo(timeCollectionView.snp.bottom).offset(100)
+            $0.top.equalTo(timeCollectionView.snp.bottom).offset(40)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview().inset(50)
             $0.height.equalTo(90)
@@ -240,6 +304,7 @@ extension TicketingViewController {
     private func datePickerValueChanged(_ sender: UIDatePicker) {
         let date = sender.date
         ticketingDate = Ticket.TicketingDate(from: date)
+        setUpTimeDatas()
     }
     
 }
@@ -248,6 +313,20 @@ extension TicketingViewController {
 // MARK: - TimeCollectionView DataSource
 
 extension TicketingViewController: UICollectionViewDataSource {
+    
+    // 데이터 설정 및 컬렉션 뷰 크기 조정
+    private func setUpTimeDatas() {
+        self.timeDatas = MockData.timeDatas[self.ticketingDate]?.sorted(by: <) ?? []
+        
+        let numbersOfLine = ((timeDatas.count + 3) / 4)
+        let collectionViewHeight = CGFloat(5 * 50 + 4 * 10) + 10
+        
+        timeCollectionView.snp.makeConstraints {
+            $0.height.equalTo(collectionViewHeight)
+        }
+        
+        timeCollectionView.reloadData()
+    }
     
     private func configureCollectionView() {
         timeCollectionView.dataSource = self
@@ -306,4 +385,10 @@ extension TicketingViewController: UICollectionViewDelegate {
 }
 
 
-// MARK: -
+// MARK: - Footer
+
+extension TicketingViewController {
+    
+    
+    
+}

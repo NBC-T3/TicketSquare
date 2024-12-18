@@ -20,6 +20,7 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
         label.font = .systemFont(ofSize: 20)
         label.backgroundColor = .clear
         label.textAlignment = .center
+        label.textColor = .white
         
         return label
     }()
@@ -37,7 +38,16 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        resetUI()
         self.isSelected = false
+    }
+    
+    private func resetUI() {
+        backgroundColor = .black
+        setData(nil)
+        timeLabel.textColor = .white
+        layer.borderColor = UIColor.white.cgColor
+
     }
     
     private func configureUI() {
@@ -47,29 +57,32 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
             $0.center.size.equalToSuperview()
         }
         
-        backgroundColor = .white
+        backgroundColor = .black
         clipsToBounds = true
         layer.cornerRadius = 10
-        layer.borderColor = UIColor.black.cgColor
+        layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 1
         
     }
     
-    func setData(_ time: Ticket.TicketcingTime) {
+    func setData(_ time: Ticket.TicketcingTime?) {
         self.time = time
-        let str = time.cellForm()
-        self.timeLabel.text = str
+        let str = time?.cellForm()
+        self.timeLabel.text = str ?? "--:--"
     }
     
     func didSelected() -> Ticket.TicketcingTime? {
-        backgroundColor = .systemBlue
+        backgroundColor = .red.withAlphaComponent(0.4)
         timeLabel.textColor = .white
+        timeLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        layer.borderColor = UIColor.red.cgColor
         return self.time
     }
     
     func didDeselected() {
-        backgroundColor = .white
-        timeLabel.textColor = .black
-
+        backgroundColor = .black
+        timeLabel.textColor = .white
+        timeLabel.font = .systemFont(ofSize: 20)
+        layer.borderColor = UIColor.white.cgColor
     }
 }
