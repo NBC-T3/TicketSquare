@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class Login: UIViewController {
+class Login: UIViewController, UITextFieldDelegate {
     
     //MARK: 각 요소들의 속성 부분
     private let loginLabel: UILabel = UILabel().then {
@@ -18,25 +18,35 @@ class Login: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 30)
         $0.textColor = .white
     }
-    private let ID: UITextField = UITextField().then {
-        $0.text = " 아이디"
+    private let id: UITextField = UITextField().then {
+        $0.becomeFirstResponder()
+        $0.placeholder = "아이디"
         $0.font = UIFont.systemFont(ofSize: 25)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
-        $0.layer.cornerRadius = 3
+        $0.borderStyle = .roundedRect
+        $0.keyboardType = .emailAddress
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .next
     }
     private let password: UITextField = UITextField().then {
-        $0.text = " 비밀번호"
+        $0.placeholder = "비밀번호"
         $0.font = UIFont.systemFont(ofSize: 25)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
-        $0.layer.cornerRadius = 3
+        $0.borderStyle = .roundedRect
+        $0.keyboardType = .default
+        $0.clearButtonMode = .whileEditing
+        
+        $0.returnKeyType = .done
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
         $0.backgroundColor = .darkGray
         $0.setTitleColor(.gray, for: .normal)
-        $0.layer.cornerRadius = 3
+        $0.layer.cornerRadius = 4
+        $0.isEnabled = false
+        $0.addTarget(self, action: #selector(loginBtnTapped), for: .touchDown)
     }
     private let joinBtn: UIButton = UIButton().then {
         $0.backgroundColor = .clear
@@ -62,8 +72,8 @@ class Login: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(200)
         }
-        view.addSubview(ID)
-        ID.snp.makeConstraints {
+        view.addSubview(id)
+        id.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.top.equalTo(loginLabel.snp.bottom)
             $0.height.equalTo(50)
@@ -71,7 +81,7 @@ class Login: UIViewController {
         view.addSubview(password)
         password.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.top.equalTo(ID.snp.bottom).offset(10)
+            $0.top.equalTo(id.snp.bottom).offset(10)
             $0.height.equalTo(50)
         }
         view.addSubview(loginBtn)
@@ -87,9 +97,20 @@ class Login: UIViewController {
         }
     }
     
+    private func gaerse() {
+        
+    }
+    
     //회원가입 버튼이 눌렸을 때
     @objc
     private func joinBtnTapped() {
         self.navigationController?.pushViewController(Join(), animated: true)
     }
+    
+    @objc
+    private func loginBtnTapped() {
+        self.navigationController?.pushViewController(MainViewController(), animated: true)
+    }
 }
+
+
