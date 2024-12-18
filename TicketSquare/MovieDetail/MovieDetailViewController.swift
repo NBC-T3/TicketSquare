@@ -3,6 +3,9 @@ import SnapKit
 
 class MovieDetailViewController: UIViewController {
     
+    // 영화 데이터
+    var movieDetails: MovieDetails!
+    
     // MARK: - UI 요소 선언
     
     // 포스터 이미지 뷰
@@ -124,6 +127,18 @@ class MovieDetailViewController: UIViewController {
         genresLabel.text = ""
     }
     
+    // 메인 뷰에서 데이터 받아서 데이터 연결 예정 ....
+//    // MARK: - 데이터 설정
+//    private func configureUI() {
+//        guard let movie = movie else { return }
+//        titleLabel.text = movie.title
+//        overviewLabel.text = movie.overview
+//        runtimeLabel.text = "Runtime: \(movie.runtime) minutes"
+//        genresLabel.text = "Genres: \(movie.genres.joined(separator: ", "))"
+//        posterImageView.image = movie.posterImage
+//    }
+    
+    // API 요청해서 더미 데이터 추출 중... 삭제 예정
     // MARK: - API 호출
     private func fetchMovieDetails() {
         APIManager.shared.fetchNowPlayingMovies(page: 1) { [weak self] movies, error in
@@ -177,5 +192,7 @@ class MovieDetailViewController: UIViewController {
         let alert = UIAlertController(title: "Reservation", message: "Reservation successful!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+        //let reservationVC = ReservationViewController() // 예매 페이지로 이동
+        //navigationController?.pushViewController(reservationVC, animated: true)
     }
 }
