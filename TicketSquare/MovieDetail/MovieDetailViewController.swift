@@ -8,7 +8,7 @@ class MovieDetailViewController: UIViewController {
     // 포스터 이미지 뷰
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFill // 이미지가 화면을 가득 채우도록 설정
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -17,8 +17,9 @@ class MovieDetailViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .black
+        label.textColor = .white // 텍스트 색상을 흰색으로 설정
         label.numberOfLines = 2
+        label.textAlignment = .center // 중앙 정렬
         return label
     }()
     
@@ -26,8 +27,9 @@ class MovieDetailViewController: UIViewController {
     private let overviewLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
+        label.textColor = .white // 텍스트 색상을 흰색으로 설정
         label.numberOfLines = 0
+        label.textAlignment = .center // 중앙 정렬
         return label
     }()
     
@@ -35,7 +37,8 @@ class MovieDetailViewController: UIViewController {
     private let runtimeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .gray
+        label.textColor = .white // 텍스트 색상을 흰색으로 설정
+        label.textAlignment = .center // 중앙 정렬
         return label
     }()
     
@@ -43,8 +46,9 @@ class MovieDetailViewController: UIViewController {
     private let genresLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .gray
+        label.textColor = .white // 텍스트 색상을 흰색으로 설정
         label.numberOfLines = 0
+        label.textAlignment = .center // 중앙 정렬
         return label
     }()
     
@@ -52,12 +56,15 @@ class MovieDetailViewController: UIViewController {
     private let reserveButton: UIButton = {
         let button = UIButton()
         button.setTitle("Reserve Now", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(.white, for: .normal) // 텍스트를 흰색으로 설정
+        button.backgroundColor = .black // 버튼 배경을 검은색으로 설정
         button.layer.cornerRadius = 8
+        button.layer.borderColor = UIColor.white.cgColor // 흰색 테두리 추가 (선택 사항)
+        button.layer.borderWidth = 1 // 테두리 두께 (선택 사항)
         button.addTarget(self, action: #selector(reserveButtonTapped), for: .touchUpInside)
         return button
     }()
+
     
     // 영화 ID 변수
     var movieID: Int!
@@ -71,15 +78,14 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: - UI 배치
     private func layoutUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black // 배경색을 검은색으로 설정
 
         [posterImageView, titleLabel, overviewLabel, runtimeLabel, genresLabel, reserveButton].forEach { view.addSubview($0) }
         
         posterImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(200)
-            make.height.equalTo(300)
+            make.top.equalTo(view.snp.top) // 화면 상단에 맞춤
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(view.snp.height).multipliedBy(0.6) // 화면의 60% 높이를 사용
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -106,7 +112,7 @@ class MovieDetailViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             make.centerX.equalToSuperview()
             make.height.equalTo(50)
-            make.width.equalTo(200)
+            make.width.equalTo(300)
         }
     }
     
@@ -126,12 +132,10 @@ class MovieDetailViewController: UIViewController {
                 print("Error fetching movies: \(error.localizedDescription)")
                 return
             }
-            
             guard let movies = movies, let firstMovie = movies.first else {
                 print("No movies available.")
                 return
             }
-            
             let movieID = firstMovie.id
             print("Selected Movie ID: \(movieID)")
             
@@ -152,7 +156,7 @@ class MovieDetailViewController: UIViewController {
                 self.runtimeLabel.text = "Runtime: \(details.runtime) minutes"
                 self.genresLabel.text = "Genres: \(details.genres.map { $0.name }.joined(separator: ", "))"
                 
-                // posterPath를 사용해 이미지 다운로드 및 설정
+                // 포스터 이미지 설정
                 if let posterPath = details.posterPath {
                     APIManager.shared.fetchImage(from: posterPath) { image in
                         if let image = image {
