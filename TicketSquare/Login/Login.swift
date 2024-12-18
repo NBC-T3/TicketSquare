@@ -25,9 +25,12 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.borderStyle = .roundedRect
+        
         $0.keyboardType = .emailAddress
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
+        
+//        $0.text = UserDefaults.standard.string(forKey: "ID")
     }
     private let password: UITextField = UITextField().then {
         $0.placeholder = "비밀번호"
@@ -35,17 +38,19 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.borderStyle = .roundedRect
+        
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
-        
         $0.returnKeyType = .done
+        
+//        $0.text = UserDefaults.standard.string(forKey: "Password")
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
         $0.backgroundColor = .darkGray
         $0.setTitleColor(.gray, for: .normal)
         $0.layer.cornerRadius = 4
-        $0.isEnabled = false
+        //$0.isEnabled = false // 아이디와 비밀번호가 입력되었을때만 활성화됨
         $0.addTarget(self, action: #selector(loginBtnTapped), for: .touchDown)
     }
     private let joinBtn: UIButton = UIButton().then {
@@ -107,9 +112,12 @@ class Login: UIViewController, UITextFieldDelegate {
         self.navigationController?.pushViewController(Join(), animated: true)
     }
     
+    //로그인 버튼이 눌렸을 때
     @objc
     private func loginBtnTapped() {
         self.navigationController?.pushViewController(MainViewController(), animated: true)
+//        UserDefaults.standard.set(id.text, forKey: "ID")
+//        UserDefaults.standard.set(password.text, forKey: "Password")
     }
 }
 

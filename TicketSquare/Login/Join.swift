@@ -12,6 +12,7 @@ import Then
 class Join: UIViewController {
     
     //MARK: 각 요소들의 속성 부분
+    //UserDefaults 부분 추후 확인을 위해 일단 주석처리 함. 추후 삭제예정
     private let joinLabel: UILabel = UILabel().then {
         $0.text = "티켓스퀘어 회원가입"
         $0.textAlignment = .center
@@ -26,6 +27,7 @@ class Join: UIViewController {
         $0.layer.cornerRadius = 3
         
         $0.becomeFirstResponder() //화면에서 가장 처음으로 포커스 주는 부분
+        //$0.text = UserDefaults.standard.string(forKey: "Name")
     }
     private let birth: UITextField = UITextField().then {
         $0.placeholder = " 생년월일을 입력해주세요."
@@ -33,6 +35,8 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        //$0.text = UserDefaults.standard.string(forKey: "Birth")
     }
     private let phoneNumber: UITextField = UITextField().then {
         $0.placeholder = " 전화번호를 입력해주세요."
@@ -40,6 +44,8 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        //$0.text = UserDefaults.standard.string(forKey: "PhoneNumber")
     }
     private let id: UITextField = UITextField().then {
         $0.placeholder = " 아이디를 입력해주세요."
@@ -47,6 +53,8 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        //$0.text = UserDefaults.standard.string(forKey: "ID")
     }
     private let password: UITextField = UITextField().then {
         $0.placeholder = " 비밀번호를 입력해주세요."
@@ -54,6 +62,8 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        //$0.text = UserDefaults.standard.string(forKey: "PW")
     }
     private let joinBtn: UIButton = UIButton().then {
         $0.backgroundColor = .systemBlue
@@ -121,9 +131,15 @@ class Join: UIViewController {
     //회원가입 완료 후 메인페이지로 이동하는 Alert
     @objc
     private func joinBtnTapped() {
+        UserDefaults.standard.set(id.text, forKey: "ID")
+        UserDefaults.standard.set(password.text, forKey: "PW")
+        UserDefaults.standard.set(name.text, forKey: "Name")
+        UserDefaults.standard.set(phoneNumber.text, forKey: "PhoneNumber")
+        UserDefaults.standard.set(birth.text, forKey: "Birth")
+        
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.navigationController?.pushViewController(MainViewController(), animated: true)
+            self?.navigationController?.pushViewController(Login(), animated: true)
 //            MainViewController().modalPresentationStyle = .fullScreen
 //            self?.present(MainViewController(), animated: true, completion: nil)
         }
