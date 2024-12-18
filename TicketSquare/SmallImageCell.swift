@@ -10,6 +10,9 @@ import SnapKit
 
 class SmallImageCell: UICollectionViewCell {
     
+    private var movieDatails: MovieDetails? = nil
+    private var posterImageData: Data? = nil
+    
     // 셀의 재사용 식별자 id
     static let identifier = "SmallImageCell"
     
@@ -91,44 +94,27 @@ class SmallImageCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented") // 스토리보드를 사용하지 않으므로 에러 처리
     }
-
-    // 외부에서 셀에 이미지를 설정하는 메서드
-    func configure(with urlString: String, title: String, genre: String? = nil) {
-        movieTitleLabel.text = title
-        genreLabel.text = genre ?? ""
-        
-    }
-
     
-    // URL로부터 이미지를 비동기적으로 가져오는 메서드
-    private func getImage(from urlString: String) {
-        guard let url = URL(string: urlString) else { return }
-        var request = URLRequest(url: url)
-
-        // URLSession을 사용하여 비동기 네트워크 요청
-        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+    // 외부에서 셀에 이미지를 설정하는 메서드
+    func configure(by movie: Movie) {
+        let imageURL = APIManager.shared.getImageURL(for: movie.posterPath)
+        APIManager.shared.fetchImage(from: imageURL) { [weak self] image in
             guard let self,
-                  let data,
-                  let response = response as? HTTPURLResponse,
-                  error == nil else {
-                print("데이터 요청 실패: \(error?.localizedDescription ?? "알 수 없는 에러")")
-                return
-            }
-
-            if !(200..<300).contains(response.statusCode) {
-                print("StatusCode: \(response.statusCode)")
-                return
-            }
-
-            guard let image = UIImage(data: data) else {
-                print("이미지 변환 실패")
-                return
-            }
-
-            DispatchQueue.main.async {
-                self.imageView.image = image
-            }
-        }.resume()
+            let image else { return }
+            self.posterImageData = image.pngData()
+            self.imageView.image = image
+        }
+        
+        APIManager.shared.fetchMovieDetails(movieID: movie.id) { [weak self] movieDatails,error  in
+            guard let self,
+                  let movieDatails,
+                  error == nil else { return }
+            
+            self.movieDatails = movieDatails
+            self.movieTitleLabel.text = movieDatails.title
+            self.genreLabel.text = movieDatails.genresDescribing()
+        }
+        
     }
     
     @objc private func buttonTapped() {

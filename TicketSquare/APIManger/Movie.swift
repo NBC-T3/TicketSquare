@@ -34,6 +34,10 @@ struct MovieDetails: Decodable {
     let runtime: Int
     let genres: [Genres]
     
+    func genresDescribing() -> String {
+        genres.map { $0.name }.joined(separator: ", ")
+    }
+    
     enum CodingKeys: String, CodingKey {
         case title, overview, runtime
         case releaseDate = "release_date"
