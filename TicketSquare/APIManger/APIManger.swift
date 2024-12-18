@@ -15,6 +15,7 @@ class APIManager {
     private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     private let APIKey = Bundle.main.infoDictionary?["APIKey"] as! String
     
+    
     private lazy var headers: HTTPHeaders = [
         "accept": "application/json",
         "Authorization": APIKey
@@ -43,7 +44,7 @@ class APIManager {
             }
     }
     
-    /// 개봉 예정 영화 목록 가져오기
+    /// 최신 영화 목록 가져오기
     /// response -> 개봉 예정인 영화 id와 tittle들의 array
     func fetchUpcomingMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
@@ -89,7 +90,7 @@ class APIManager {
             }
     }
     
-    /// 개봉 예정 영화 목록 가져오기
+    /// 최 영화 목록 가져오기
     /// response -> Top Rated 영화 id와 tittle들의 array
     func fetchTopRatedMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
