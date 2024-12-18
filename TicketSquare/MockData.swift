@@ -18,4 +18,14 @@ struct MockData {
             Ticket.TicketcingTime(hour: 23, minute: 30)
         ]
     }()
+    
+    
+    static let tickets: [Ticket] = {
+        var numberOfPeople = Ticket.NumberOfPeople()
+        numberOfPeople.updateAdult(3)
+        numberOfPeople.updateMinor(2)
+        let ticket = Ticket(ticketingDate: .init(from: Date()), ticketcingTime: .init(hour: 15, minute: 20), numberOfPeople: numberOfPeople)
+        
+        return Array<Ticket>(repeating: ticket, count: 3)
+    }()
 }
