@@ -26,6 +26,11 @@ final class TicketingViewController: UIViewController {
         }
     }
     
+    private var isSet: Bool {
+        ticketingTime != nil && numberOfPeople.totalPrice != 0
+    }
+    
+    // 헤더 라벨 뷰
     private let headerLabel: UILabel = {
         let label = UILabel()
         
@@ -38,7 +43,8 @@ final class TicketingViewController: UIViewController {
         return label
     }()
     
-    private let scrollView: UIScrollView = {
+    // 입력 스크롤 뷰
+    private let inputScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         
         scrollView.isScrollEnabled = true
@@ -47,6 +53,7 @@ final class TicketingViewController: UIViewController {
         return scrollView
     }()
     
+    // 날짜 선택 데이트 피커
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
@@ -64,8 +71,8 @@ final class TicketingViewController: UIViewController {
         return datePicker
     }()
     
+    // 예매 시간 컬렉션 뷰
     private let timeCollectionView: UICollectionView = {
-        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize.width = (UIScreen.main.bounds.width - 70) / 4
         flowLayout.itemSize.height = 50
@@ -81,16 +88,7 @@ final class TicketingViewController: UIViewController {
         return collectionView
     }()
     
-    private let stackVerticalView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.backgroundColor = .clear
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 5
-        
-        return stackView
-    }()
-    
+    // 스텝퍼 스택 뷰 ( 어른 인원 수 스텝퍼, 청소년 인원 수 스텝퍼 )
     private let stepperStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -100,10 +98,7 @@ final class TicketingViewController: UIViewController {
         return stackView
     }()
     
-    private var isSet: Bool {
-        ticketingTime != nil && numberOfPeople.totalPrice != 0
-    }
-    
+    // 어른 인원 수 스텝퍼
     private lazy var adultStepper: TicketingStepper = {
         let stepper = TicketingStepper()
         stepper.setColor(.gray)
@@ -119,6 +114,7 @@ final class TicketingViewController: UIViewController {
         return stepper
     }()
     
+    // 청소년 인원 수 스텝퍼
     private lazy var minorStepper: TicketingStepper = {
         let stepper = TicketingStepper()
         stepper.setColor(.gray)
@@ -135,6 +131,7 @@ final class TicketingViewController: UIViewController {
         return stepper
     }()
     
+    // 푸터 뷰 ( 가격 스택 뷰, 결제 버튼 )
     private let footerView: UIStackView = {
         let stackView = UIStackView()
         
@@ -145,6 +142,7 @@ final class TicketingViewController: UIViewController {
         return stackView
     }()
     
+    // 가격 스택 뷰
     private let priceStackView: UIStackView = {
         let stackView = UIStackView()
         
@@ -154,6 +152,7 @@ final class TicketingViewController: UIViewController {
         return stackView
     }()
     
+    // "총 금액" 라벨
     private let totalPriceLabel: UILabel = {
         let label = UILabel()
         
@@ -165,6 +164,7 @@ final class TicketingViewController: UIViewController {
         return label
     }()
     
+    // "0,000원" 금액 라벨
     private let priceLabel: UILabel = {
         let label = UILabel()
         
@@ -176,6 +176,7 @@ final class TicketingViewController: UIViewController {
         return label
     }()
     
+    // 결제 버튼
     private let paymentButton: UIButton = {
         let button = UIButton()
         
@@ -202,20 +203,22 @@ final class TicketingViewController: UIViewController {
         setUpTimeDatas()
     }
     
+    // 푸터 업데이트
     private func updateFooter() {
         updatePrice()
         updatePaymentButton()
     }
     
+    // 금액 라벨 업데이트
     private func updatePrice() {
         priceLabel.text = PriceFormatter.won(self.numberOfPeople.totalPrice)
     }
     
+    // 결제 버튼 업데이트
     private func updatePaymentButton() {
         paymentButton.isEnabled = isSet
         
         if paymentButton.isEnabled {
-//            paymentButton.
             paymentButton.layer.borderColor = UIColor.lightGray.cgColor
             paymentButton.backgroundColor = .white
         } else {
@@ -231,12 +234,14 @@ final class TicketingViewController: UIViewController {
 
 extension TicketingViewController {
     
+    // 전체 UI 설정
     private func configureUI() {
+        
         view.backgroundColor = .black
         
         [
             headerLabel,
-            scrollView,
+            inputScrollView,
             footerView
         ].forEach { view.addSubview($0)}
         
@@ -244,7 +249,7 @@ extension TicketingViewController {
             datePicker,
             timeCollectionView,
             stepperStackView
-        ].forEach { scrollView.addSubview($0) }
+        ].forEach { inputScrollView.addSubview($0) }
         
         [
             adultStepper,
@@ -257,11 +262,9 @@ extension TicketingViewController {
         ].forEach { footerView.addArrangedSubview($0) }
         
         [
-            
             totalPriceLabel,
             priceLabel
         ].forEach { priceStackView.addArrangedSubview($0) }
-        
         
         headerLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -275,7 +278,7 @@ extension TicketingViewController {
             $0.height.equalTo(100)
         }
         
-        scrollView.snp.makeConstraints {
+        inputScrollView.snp.makeConstraints {
             $0.top.equalTo(headerLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalTo(footerView.snp.top).offset(-10)
@@ -301,7 +304,6 @@ extension TicketingViewController {
             $0.bottom.equalToSuperview().inset(50)
             $0.height.equalTo(90)
         }
-        
     }
     
 }
@@ -311,7 +313,7 @@ extension TicketingViewController {
 
 extension TicketingViewController {
     
-    // TODO: - 날짜 선택에 따라 시간 데이터 액션 필요
+    // DatePicker 값 변경 메서드
     @objc
     private func datePickerValueChanged(_ sender: UIDatePicker) {
         let date = sender.date
@@ -326,13 +328,14 @@ extension TicketingViewController {
 
 extension TicketingViewController: UICollectionViewDataSource {
     
-    // 데이터 설정 및 컬렉션 뷰 크기 조정
+    // 데이터 설정
     private func setUpTimeDatas() {
         self.timeDatas = MockData.timeDatas[self.ticketingDate]?.sorted(by: <) ?? []
 
         timeCollectionView.reloadData()
     }
     
+    // 컬렉션 뷰 설정
     private func configureCollectionView() {
         timeCollectionView.dataSource = self
         timeCollectionView.delegate = self
@@ -341,10 +344,12 @@ extension TicketingViewController: UICollectionViewDataSource {
                                     forCellWithReuseIdentifier: TicketingTimeCollectionViewCell.id)
     }
     
+    // 셀 수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         timeDatas.count
     }
     
+    // 셀 설정 및 반환
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TicketingTimeCollectionViewCell.id, for: indexPath) as? TicketingTimeCollectionViewCell else { return UICollectionViewCell() }
         
@@ -360,6 +365,7 @@ extension TicketingViewController: UICollectionViewDataSource {
 
 extension TicketingViewController: UICollectionViewDelegate {
     
+    // 셀 선택 전 검증
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else {
             return false
@@ -376,19 +382,21 @@ extension TicketingViewController: UICollectionViewDelegate {
         return true
     }
     
+    // 셀 선택 후
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell,
               let time = cell.didSelected() else { return }
         ticketingTime = time
-        
     }
     
+    // 셀 선택 해제 후
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else { return }
         cell.didDeselected()
         
         self.ticketingTime = nil
     }
+    
 }
 
 
