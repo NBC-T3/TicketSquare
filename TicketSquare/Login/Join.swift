@@ -123,12 +123,14 @@ class Join: UIViewController {
     private func joinBtnTapped() {
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            let mainView = MainViewController()
-            mainView.modalPresentationStyle = .fullScreen
-            self?.present(mainView, animated: true, completion: nil)
+            self?.navigationController?.pushViewController(MainViewController(), animated: true)
+//            MainViewController().modalPresentationStyle = .fullScreen
+//            self?.present(MainViewController(), animated: true, completion: nil)
         }
         alert.addAction(action)
         present(alert, animated: true)
     }
     
 }
+
+
