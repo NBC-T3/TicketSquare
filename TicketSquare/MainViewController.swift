@@ -64,8 +64,10 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
         setupViews()  // 뷰 구성하는 메서드 호출
         fetchMovies()  // 영화 데이터를 가져오는 메서드 호출
+//        self.view.backgroundColor = .white
     }
     
     private func setupViews() {
@@ -107,16 +109,22 @@ class MainViewController: UIViewController {
         
         // 인기 영화 데이터를 가져옴
         group.enter()
-        APIManager.shared.fetchPopularMovies(page: 1) { movies, _ in
-            self.popularMovies = movies ?? []  // 데이터를 가져와 popularMovies에 저장
-            guard let movies = movies else { return }
+        APIManager.shared.fetchPopularMovies(page: 1) { [weak self] movies, _ in
+            guard let self,
+                let movies else {
+                group.leave()
+                return
+            }
+            
+            self.popularMovies = movies// 데이터를 가져와 popularMovies에 저장
             group.leave()
         }
         
         // 최신 영화 데이터를 가져옴 (장르 포함)
         group.enter()
-        APIManager.shared.fetchUpcomingMovies(page: 1) { movies, _ in
-            guard let movies = movies else {
+        APIManager.shared.fetchUpcomingMovies(page: 1) { [weak self] movies, _ in
+            guard let self,
+                let movies else {
                 group.leave()
                 return
             }
@@ -127,8 +135,9 @@ class MainViewController: UIViewController {
         
         // 현재 상영 중인 영화 데이터를 가져옴 (장르 포함)
         group.enter()
-        APIManager.shared.fetchNowPlayingMovies(page: 1) { movies, _ in
-            guard let movies = movies else {
+        APIManager.shared.fetchNowPlayingMovies(page: 1) { [weak self] movies, _ in
+            guard let self,
+                let movies else {
                 group.leave()
                 return
             }
@@ -139,8 +148,9 @@ class MainViewController: UIViewController {
         
         // 최고 등급 영화 데이터를 가져옴 (장르 포함)
         group.enter()
-        APIManager.shared.fetchTopRatedMovies(page: 1) { movies, _ in
-            guard let movies = movies else {
+        APIManager.shared.fetchTopRatedMovies(page: 1) { [weak self] movies, _ in
+            guard let self,
+                let movies else {
                 group.leave()
                 return
             }

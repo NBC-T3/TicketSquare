@@ -95,9 +95,22 @@ class SmallImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented") // 스토리보드를 사용하지 않으므로 에러 처리
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.movieDatails = nil
+        self.posterImageData = nil
+        
+        self.imageView.image = nil
+        self.movieTitleLabel.text = ""
+        self.genreLabel.text = ""
+    }
+    
     // 외부에서 셀에 이미지를 설정하는 메서드
     func configure(by movie: Movie) {
+        
         let imageURL = APIManager.shared.getImageURL(for: movie.posterPath)
+        
         APIManager.shared.fetchImage(from: imageURL) { [weak self] image in
             guard let self,
             let image else { return }
