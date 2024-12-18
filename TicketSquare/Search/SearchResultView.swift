@@ -93,4 +93,5 @@ class SearchResultView: UIView {
         
         return section
     }
+
 }
