@@ -93,7 +93,3 @@ class SearchMainView: UIView {
     
     
 }
-
-#Preview{
-    SearchMainView()
-}

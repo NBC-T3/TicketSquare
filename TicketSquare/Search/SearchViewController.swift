@@ -138,6 +138,3 @@ extension SearchViewController: UICollectionViewDataSource {
 //    }
 }
 
-#Preview{
-    SearchViewController(mode: .searchMain)
-}
