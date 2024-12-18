@@ -10,11 +10,11 @@ import UIKit
 class SearchCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "SearchCollectionViewCell"
-
-    // 이미지 뷰 설정
+    
+    //MARK: 셀 구성
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill // 이미지 비율을 유지하며 셀 영역을 채움
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true // 이미지가 셀의 경계를 넘지 않도록 잘라냄
         imageView.layer.cornerRadius = 10 // 셀의 모서리를 둥글게 설정
         imageView.backgroundColor = .lightGray // 이미지 로딩 중에 표시될 배경색
@@ -27,40 +27,76 @@ class SearchCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    var buttonAction: (() -> Void)?
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "title"
+        return label
+    }()
     
-    // 셀 초기화 메서드
+    private let genreLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "genre"
+        return label
+    }()
+    
+    
+    //MARK: 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        // 셀의 contentView에 imageView 추가
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: 제약조건 설정
+    func setupView(){
         contentView.addSubview(imageView)
         contentView.addSubview(button)
+        addSubview(titleLabel)
+        addSubview(genreLabel)
         
-        // 이미지 뷰 레이아웃 설정
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        [button].forEach{
+            $0.snp.makeConstraints{
+                $0.edges.equalToSuperview()
+            }
         }
         
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        imageView.snp.makeConstraints{
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(160)
+        }
+        
+        titleLabel.snp.makeConstraints{
+            $0.top.equalTo(imageView.snp.bottom).offset(2)
+        }
+        
+        genreLabel.snp.makeConstraints{
+            $0.top.equalTo(titleLabel.snp.bottom).offset(2)
         }
         
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
-    // 스토리보드 사용 시 호출되는 초기화 메서드
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented") // 스토리보드를 사용하지 않으므로 에러 처리
-    }
-
-    // 외부에서 셀에 이미지를 설정하는 메서드
-    func configure(with urlString: String) {
-        getImage(from: urlString)
-    }
-
     
-    // URL로부터 이미지를 비동기적으로 가져오는 메서드
-    private func getImage(from urlString: String) {
+    //MARK: 컬렉션뷰 탭 이벤트
+    @objc private func buttonTapped() {
+        //TODO: 상세페이지 이동
+    }
+    
+    var buttonAction: (() -> Void)?
+
+    //MARK: 이미지 세팅 메소드
+    func configure(_ urlString: String) {
+        fetchImage(urlString)//이미지 호출
+    }
+    
+    //MARK: 이미지 호출 - READ
+    private func fetchImage(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
 
@@ -90,7 +126,5 @@ class SearchCollectionViewCell: UICollectionViewCell {
         }.resume()
     }
     
-    @objc private func buttonTapped() {
-        buttonAction?()
-    }
+
 }

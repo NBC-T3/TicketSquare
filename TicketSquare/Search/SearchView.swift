@@ -1,15 +1,16 @@
 //
-//  SearchMainView.swift
+//  SearchView.swift
 //  TicketSquare
 //
-//  Created by 안준경 on 12/17/24.
+//  Created by 안준경 on 12/18/24.
 //
 
 import UIKit
 import SnapKit
 
-class SearchMainView: UIView {
+class SearchView: UIView {
     
+    //MARK: 검색바
     private let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
         searchBar.tintColor = .red
@@ -19,7 +20,7 @@ class SearchMainView: UIView {
         return searchBar
     }()
     
-    private let searchButton: UIButton = {
+    let searchButton: UIButton = {
         var button = UIButton()
         button.setTitle("검색", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -28,7 +29,8 @@ class SearchMainView: UIView {
         return button
     }()
     
-    private let label: UILabel = {
+    //MARK: 메인화면
+    let titleLabel: UILabel = {
         var label = UILabel()
         label.text = "현재 상영중"
         label.textColor = .white
@@ -43,16 +45,42 @@ class SearchMainView: UIView {
         return tableView
     }()
     
+    //MARK: 검색결과화면
+    let headerLabel: UILabel = {
+        var label = UILabel()
+        label.backgroundColor = .red
+        label.text = "Header"
+        label.font = .systemFont(ofSize: 40)
+        return label
+    }()
+    
+    let collectionView: UICollectionView = {
+        //레이아웃 설정
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: 120, height: 180) //셀 크기
+        flowLayout.minimumLineSpacing = 50 //셀 세로 간격
+        flowLayout.minimumInteritemSpacing = 2 //셀 가로 간격
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0) //셀 여백
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = .black
+        
+        return collectionView
+    }()
+    
+
+    
+    //MARK: 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpView()
-//        tableView.reloadData()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: 제약조건
     func setUpView() {
         let safeArea = safeAreaLayoutGuide
         
@@ -60,8 +88,9 @@ class SearchMainView: UIView {
         
         addSubview(searchBar)
         addSubview(searchButton)
-        addSubview(label)
+        addSubview(titleLabel)
         addSubview(tableView)
+        addSubview(collectionView)
         
         searchBar.snp.makeConstraints {
             $0.top.equalTo(safeArea.snp.top)
@@ -77,7 +106,7 @@ class SearchMainView: UIView {
             $0.height.equalTo(45)
         }
         
-        label.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.top.equalTo(safeArea).offset(30)
             $0.leading.equalTo(safeArea).offset(20)
             $0.bottom.equalTo(tableView.snp.top).inset(50)
@@ -89,7 +118,13 @@ class SearchMainView: UIView {
             $0.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(safeArea).offset(-40)
         }
+        
+        collectionView.snp.makeConstraints{
+            $0.top.equalTo(safeArea).offset(140)
+            $0.leading.equalTo(safeArea)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalTo(safeArea).offset(-40)
+        }
     }
-    
     
 }
