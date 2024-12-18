@@ -8,13 +8,6 @@
 import UIKit
 import SnapKit
 
-class TestViewController: UIViewController {
-    override func loadView() {
-        super.loadView()
-        view = TicketingStepper()
-    }
-}
-
 class TicketingStepper: UIView {
     
     private(set) var value: Int = 0
