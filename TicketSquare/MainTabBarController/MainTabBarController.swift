@@ -12,7 +12,7 @@ class MainTabBarController: UITabBarController {
         tabBar.backgroundColor = .black // 탭 바의 배경색을 검은색으로 설정
         tabBar.isTranslucent = false  // 탭 바의 투명도 비활성화
         
-        // 탭 추가
+        // 탭 추가 ( ViewController 들 연결 )
         let homeVC = createNavController(vc: MainViewController(), title: "Home", imageName: "house.fill")
         let searchVC = createNavController(vc: SearchViewController(), title: "Search", imageName: "magnifyingglass")
         let accountVC = createNavController(vc: AccountViewController(), title: "Account", imageName: "person.fill")
@@ -30,6 +30,7 @@ class MainTabBarController: UITabBarController {
     }
 }
 
+// 테스트용 ViewController들 삭제해야 함
 class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
