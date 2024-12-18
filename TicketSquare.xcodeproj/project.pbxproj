@@ -42,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+
 				23C5FABB2D12E8210064A63C /* Alamofire in Frameworks */,
 				3BD207712D0C592200487378 /* SnapKit in Frameworks */,
 				3BD207762D0C593B00487378 /* Then in Frameworks */,
@@ -122,6 +123,7 @@
 			packageReferences = (
 				3BD2076F2D0C592200487378 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				3BD207742D0C593A00487378 /* XCRemoteSwiftPackageReference "Then" */,
+
 				23C5FAB92D12E8210064A63C /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -354,6 +356,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+
 		23C5FAB92D12E8210064A63C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -381,6 +384,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+
 		23C5FABA2D12E8210064A63C /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 23C5FAB92D12E8210064A63C /* XCRemoteSwiftPackageReference "Alamofire" */;
