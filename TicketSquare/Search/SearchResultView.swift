@@ -95,6 +95,6 @@ class SearchResultView: UIView {
     }
 }
 
-#Preview{
-    SearchResultView()
-}
+//#Preview{
+//    SearchResultView()
+//}

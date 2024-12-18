@@ -19,35 +19,37 @@ class Join: UIViewController {
         $0.textColor = .white
     }
     private let name: UITextField = UITextField().then {
-        $0.text = " 이름을 입력해주세요."
+        $0.placeholder = " 이름을 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        $0.becomeFirstResponder() //화면에서 가장 처음으로 포커스 주는 부분
     }
     private let birth: UITextField = UITextField().then {
-        $0.text = " 생년월일을 입력해주세요."
+        $0.placeholder = " 생년월일을 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
     }
     private let phoneNumber: UITextField = UITextField().then {
-        $0.text = " 전화번호를 입력해주세요."
+        $0.placeholder = " 전화번호를 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
     }
     private let id: UITextField = UITextField().then {
-        $0.text = " 아이디를 입력해주세요."
+        $0.placeholder = " 아이디를 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
     }
     private let password: UITextField = UITextField().then {
-        $0.text = " 비밀번호를 입력해주세요."
+        $0.placeholder = " 비밀번호를 입력해주세요."
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.backgroundColor = .gray
         $0.textColor = .darkGray

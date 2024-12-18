@@ -94,6 +94,6 @@ class SearchMainView: UIView {
     
 }
 
-#Preview{
-    SearchMainView()
-}
+//#Preview{
+//    SearchMainView()
+//}
