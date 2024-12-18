@@ -72,10 +72,10 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
     }
     
     func didSelected() -> Ticket.TicketcingTime? {
-        backgroundColor = .red.withAlphaComponent(0.4)
-        timeLabel.textColor = .white
+        backgroundColor = .white
+        timeLabel.textColor = .black
         timeLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        layer.borderColor = UIColor.red.cgColor
+
         return self.time
     }
     
@@ -83,6 +83,5 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
         backgroundColor = .black
         timeLabel.textColor = .white
         timeLabel.font = .systemFont(ofSize: 20)
-        layer.borderColor = UIColor.white.cgColor
     }
 }

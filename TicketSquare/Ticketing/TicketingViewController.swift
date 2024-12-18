@@ -15,16 +15,24 @@ final class TicketingViewController: UIViewController {
     private var movieDetail: MovieDetails?
     
     private var ticketingDate: Ticket.TicketingDate = .init(from: Date.now)
-    private var ticketingTime: Ticket.TicketcingTime? = nil
-    private var numberOfPeople: Ticket.NumberOfPeople = Ticket.NumberOfPeople()
+    private var ticketingTime: Ticket.TicketcingTime? = nil {
+        didSet {
+            updatePaymentButton()
+        }
+    }
+    private var numberOfPeople: Ticket.NumberOfPeople = Ticket.NumberOfPeople() {
+        didSet {
+            updateFooter()
+        }
+    }
     
     private let headerLabel: UILabel = {
         let label = UILabel()
         
         label.text = "title"
         label.textColor = .white
-        label.backgroundColor = .darkGray
-        label.font = .boldSystemFont(ofSize: 30)
+        label.backgroundColor = .darkGray.withAlphaComponent(0.35)
+        label.font = .boldSystemFont(ofSize: 40)
         label.textAlignment = .center
         
         return label
@@ -42,10 +50,11 @@ final class TicketingViewController: UIViewController {
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
+        
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
         datePicker.timeZone = .autoupdatingCurrent
-        datePicker.tintColor = .red.withAlphaComponent(0.6)
+        datePicker.tintColor = .white
         datePicker.overrideUserInterfaceStyle = .dark
 
         datePicker.addTarget(self,
@@ -97,16 +106,14 @@ final class TicketingViewController: UIViewController {
     
     private lazy var adultStepper: TicketingStepper = {
         let stepper = TicketingStepper()
-        stepper.setColor(.lightGray)
+        stepper.setColor(.gray)
         stepper.setTitle("일반")
         
         stepper.onDecreaseButton = { [weak self] in
             self?.numberOfPeople.subtractAdult()
-            self?.updateFooter()
         }
         stepper.onIncreaseButton = { [weak self] in
             self?.numberOfPeople.addAdult()
-            self?.updateFooter()
         }
         
         return stepper
@@ -114,17 +121,15 @@ final class TicketingViewController: UIViewController {
     
     private lazy var minorStepper: TicketingStepper = {
         let stepper = TicketingStepper()
-        stepper.setColor(.lightGray)
+        stepper.setColor(.gray)
         stepper.setTitle("청소년")
         
         stepper.onDecreaseButton = { [weak self] in
             self?.numberOfPeople.subtractMinor()
-            self?.updateFooter()
         }
         
         stepper.onIncreaseButton = { [weak self] in
             self?.numberOfPeople.addMinor()
-            self?.updateFooter()
         }
         
         return stepper
@@ -153,7 +158,7 @@ final class TicketingViewController: UIViewController {
         let label = UILabel()
         
         label.text = "총 금액"
-
+        label.textColor = .white
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         
@@ -164,7 +169,7 @@ final class TicketingViewController: UIViewController {
         let label = UILabel()
         
         label.text = PriceFormatter.won(0)
-        
+        label.textColor = .white
         label.textAlignment = .right
         label.font = .systemFont(ofSize: 25, weight: .semibold)
         
@@ -175,20 +180,23 @@ final class TicketingViewController: UIViewController {
         let button = UIButton()
         
         button.setTitle("결제하기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(.white.withAlphaComponent(0.4), for: .disabled)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.darkGray.withAlphaComponent(0.3), for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 25)
-        button.backgroundColor = .lightGray
+        
         button.layer.cornerRadius = 16
-        button.titleLabel?.isHidden = false
         button.isEnabled = false
+        
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        button.backgroundColor = .lightGray.withAlphaComponent(0.1)
         
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.isHidden = true
         configureUI()
         configureCollectionView()
         setUpTimeDatas()
@@ -207,9 +215,12 @@ final class TicketingViewController: UIViewController {
         paymentButton.isEnabled = isSet
         
         if paymentButton.isEnabled {
-            paymentButton.backgroundColor = .darkGray
+//            paymentButton.
+            paymentButton.layer.borderColor = UIColor.lightGray.cgColor
+            paymentButton.backgroundColor = .white
         } else {
-            paymentButton.backgroundColor = .lightGray
+            paymentButton.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+            paymentButton.backgroundColor = .lightGray.withAlphaComponent(0.1)
         }
     }
     
@@ -253,7 +264,7 @@ extension TicketingViewController {
         
         
         headerLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).inset(0)
+            $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(0)
             $0.height.equalTo(80)
         }
@@ -265,7 +276,7 @@ extension TicketingViewController {
         }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(headerLabel.snp.bottom).offset(40)
+            $0.top.equalTo(headerLabel.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalTo(footerView.snp.top).offset(-10)
         }
@@ -281,10 +292,11 @@ extension TicketingViewController {
             $0.top.equalTo(datePicker.snp.bottom).offset(80)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(10)
+            $0.height.equalTo(260)
         }
         
         stepperStackView.snp.makeConstraints {
-            $0.top.equalTo(timeCollectionView.snp.bottom).offset(40)
+            $0.top.equalTo(timeCollectionView.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview().inset(50)
             $0.height.equalTo(90)
@@ -317,14 +329,7 @@ extension TicketingViewController: UICollectionViewDataSource {
     // 데이터 설정 및 컬렉션 뷰 크기 조정
     private func setUpTimeDatas() {
         self.timeDatas = MockData.timeDatas[self.ticketingDate]?.sorted(by: <) ?? []
-        
-        let numbersOfLine = ((timeDatas.count + 3) / 4)
-        let collectionViewHeight = CGFloat(5 * 50 + 4 * 10) + 10
-        
-        timeCollectionView.snp.makeConstraints {
-            $0.height.equalTo(collectionViewHeight)
-        }
-        
+
         timeCollectionView.reloadData()
     }
     
@@ -375,12 +380,14 @@ extension TicketingViewController: UICollectionViewDelegate {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell,
               let time = cell.didSelected() else { return }
         ticketingTime = time
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else { return }
         cell.didDeselected()
-        ticketingTime = nil
+        
+        self.ticketingTime = nil
     }
 }
 
