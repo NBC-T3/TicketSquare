@@ -8,13 +8,6 @@
 import UIKit
 import SnapKit
 
-class TestViewController: UIViewController {
-    override func loadView() {
-        super.loadView()
-        view = TicketingStepper()
-    }
-}
-
 class TicketingStepper: UIView {
     
     private(set) var value: Int = 0
@@ -27,6 +20,7 @@ class TicketingStepper: UIView {
         let label = UILabel()
         
         label.text = "Title"
+        label.textColor = .white
         label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textAlignment = .left
         
@@ -53,7 +47,7 @@ class TicketingStepper: UIView {
     private lazy var decreaseButton = {
         let button = stepperButton(.decrease)
         
-        button.addTarget(nil,
+        button.addTarget(self,
                          action: #selector(decreaseButtonTapped),
                          for: .touchUpInside)
         return button
@@ -63,7 +57,7 @@ class TicketingStepper: UIView {
     private lazy var increaseButton = {
         let button = stepperButton(.increase)
         
-        button.addTarget(nil,
+        button.addTarget(self,
                          action: #selector(increaseButtonTapped),
                          for: .touchUpInside)
         

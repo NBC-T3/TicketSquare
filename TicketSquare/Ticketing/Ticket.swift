@@ -52,10 +52,16 @@ struct Ticket {
 
 extension Ticket {
     // 예매 일자 구조체
-    struct TicketingDate {
+    struct TicketingDate: Hashable {
         private let year: Int
         private let month: Int
         private let day: Int
+        
+        init(year: Int, month: Int, day: Int) {
+            self.year = year
+            self.month = month
+            self.day = day
+        }
         
         init(from date: Date) {
             self.year = Calendar.current.component(.year, from: date)
@@ -63,7 +69,8 @@ extension Ticket {
             self.day = Calendar.current.component(.day, from: date)
         }
     }
-    
+
+        
 }
 
 // MARK: - struct TicketcingTime
@@ -71,17 +78,14 @@ extension Ticket {
 extension Ticket {
     // 예매 시간 구조체
     struct TicketcingTime: Hashable, Comparable {
-        static func < (lhs: Ticket.TicketcingTime, rhs: Ticket.TicketcingTime) -> Bool {
-            guard lhs.hour < rhs.hour else { return true }
-            guard lhs.minute < rhs.minute else { return true }
-            
-            return false
-        }
         
         private let hour: Int
         private let minute: Int
         
         init(hour: Int, minute: Int) {
+            let hour = hour < 24 ? hour : 0
+            let minute = minute < 60 ? minute : 0
+
             self.hour = hour
             self.minute = minute
         }
@@ -91,6 +95,10 @@ extension Ticket {
             return [hour, minute]
                 .map { formatter($0) }
                 .joined(separator: ":")
+        }
+        
+        static func < (lhs: Ticket.TicketcingTime, rhs: Ticket.TicketcingTime) -> Bool {
+            lhs.cellForm() < rhs.cellForm()
         }
         
         // 문자 형태화 메서드
@@ -108,6 +116,11 @@ extension Ticket {
 extension Ticket {
     // 인원 수 구조체
     struct NumberOfPeople {
+        
+        var totalPrice: Int {
+            adult * 15000 + minor * 12000
+        }
+        
         // 성인 인원 수
         private var adult: Int = 0
         // 미성년자 인원 수

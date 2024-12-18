@@ -12,6 +12,8 @@ struct Movie: Decodable {
     let id: Int
     let title: String
     let posterPath: String
+
+    
     
     enum CodingKeys: String, CodingKey {
         case id, title
@@ -31,6 +33,10 @@ struct MovieDetails: Decodable {
     let posterPath: String?
     let runtime: Int
     let genres: [Genres]
+    
+    func genresDescribing() -> String {
+        genres.map { $0.name }.joined(separator: ", ")
+    }
     
     enum CodingKeys: String, CodingKey {
         case title, overview, runtime
