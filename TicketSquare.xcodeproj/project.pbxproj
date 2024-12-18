@@ -44,7 +44,6 @@
 			files = (
 				23C5FABB2D12E8210064A63C /* Alamofire in Frameworks */,
 				3BD207712D0C592200487378 /* SnapKit in Frameworks */,
-				99A285232D12E7CB006F942D /* AlamofireDynamic in Frameworks */,
 				3BD207762D0C593B00487378 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
