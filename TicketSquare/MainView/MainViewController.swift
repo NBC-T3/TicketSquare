@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
     // 제목 영역을 감싸는 컨테이너 뷰
     private let titleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         return view
     }()
     
@@ -52,7 +52,7 @@ class MainViewController: UIViewController {
         // UICollectionView 초기화 및 설정
         let collectionView = UICollectionView(
             frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = UIColorStyle.bg
         return collectionView
     }()
     
@@ -102,7 +102,7 @@ class MainViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.backgroundColor = .black  // 전체 화면 배경색 설정
+        view.backgroundColor = UIColorStyle.bg  // 전체 화면 배경색 설정
         
         // 제목 컨테이너 뷰 추가
         view.addSubview(titleView)
@@ -340,10 +340,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             cell.configure(with: movie)
             
             // 버튼 액션 설정
-            cell.buttonAction = { movieDetails, image in
-                let detailsVC = MovieDetailViewController()
-                detailsVC.configure(with: movieDetails, posterImage: image)
-                self.present(detailsVC, animated: true)
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
             }
             
             return cell
@@ -357,11 +355,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             cell.configure(by: movie)
             
             // 버튼 액션 추가
-            cell.buttonAction = { movieDetails, image in
-                let detailsVC = MovieDetailViewController()
-                detailsVC.configure(with: movieDetails, posterImage: image)
-                self.present(detailsVC, animated: true)
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
             }
+            
             return cell
             
         case .nowPlaying:
@@ -373,10 +370,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             cell.configure(by: movie)
             
             // 버튼 액션 추가
-            cell.buttonAction = { movieDetails, image in
-                let detailsVC = MovieDetailViewController()
-                detailsVC.configure(with: movieDetails, posterImage: image)
-                self.present(detailsVC, animated: true)
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
             }
             return cell
             
@@ -389,10 +384,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             cell.configure(by: movie)
             
             // 버튼 액션 추가
-            cell.buttonAction = { movieDetails, image in
-                let detailsVC = MovieDetailViewController()
-                detailsVC.configure(with: movieDetails, posterImage: image)
-                self.present(detailsVC, animated: true)
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
             }
             return cell
         }
@@ -433,5 +426,19 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         case .topRated: return topRatedMovies[index]
         default: fatalError("Invalid section")
         }
+    }
+    
+    private func presentMovieDetailView(movieDetails: MovieDetails, image: UIImage) {
+        let detailsVC = MovieDetailViewController()
+        detailsVC.configure(with: movieDetails, posterImage: image)
+        detailsVC.onPushViewController = { [weak self] viewController in
+            guard let self else {
+                print("1")
+                return }
+            self.navigationController?.pushViewController(viewController, animated: true)
+
+            print(self.navigationController)
+        }
+        self.present(detailsVC, animated: true)
     }
 }

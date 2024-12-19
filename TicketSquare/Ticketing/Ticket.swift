@@ -10,8 +10,25 @@ import Foundation
 // MARK: - Ticket
 
 /// 예매 페이지 티켓 데이터 형태
-struct Ticket {
+struct Ticket: Codable, Equatable {
     
+    init?(from nsData: NSData) {
+        guard let ticket = try? JSONDecoder().decode(Self.self,
+                                                     from: nsData as Data) else { return nil }
+        
+        self = ticket
+    }
+    
+    func nsData() -> NSData? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+     
+        return data as NSData
+    }
+    
+    // 식별자 ID
+    private let id: UUID
+    // 영화 정보
+    private(set) var movieDetails: MovieDetails?
     // 예매 일자
     private(set) var ticketingDate: Ticket.TicketingDate = TicketingDate(from: Date.now)
     // 예매 시간
@@ -19,6 +36,22 @@ struct Ticket {
     // 인원 수
     private(set) var numberOfPeople = Ticket.NumberOfPeople()
     
+    init(id: UUID = UUID(),
+         movieDetails: MovieDetails?,
+         ticketingDate: Ticket.TicketingDate,
+         ticketcingTime: Ticket.TicketcingTime?,
+         numberOfPeople: NumberOfPeople) {
+        self.id = id
+        self.movieDetails = movieDetails
+        self.ticketingDate = ticketingDate
+        self.ticketcingTime = ticketcingTime
+        self.numberOfPeople = numberOfPeople
+    }
+    
+    // 영화 상세 정보 설정
+    mutating func updateMovieDetails(_ moviewDetails: MovieDetails) {
+        self.movieDetails = moviewDetails
+    }
     // 예매 일자 재설정
     mutating func updateDate(to date: Date) {
         self.ticketingDate = TicketingDate(from: date)
@@ -46,13 +79,25 @@ struct Ticket {
         }
     }
     
+    func schedule() -> (startTime: String, endTime: String)? {
+        guard let runtime = movieDetails?.runtime,
+        let startTime = ticketcingTime?.cellForm(),
+        let endTime = ticketcingTime?.endTime(by: runtime) else { return nil }
+        
+        return (startTime: startTime,
+                endTime: endTime)
+    }
+    
+    static func == (lhs: Ticket, rhs: Ticket) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 // MARK: - struct TicketingDate
 
 extension Ticket {
     // 예매 일자 구조체
-    struct TicketingDate: Hashable {
+    struct TicketingDate: Codable, Hashable {
         private let year: Int
         private let month: Int
         private let day: Int
@@ -77,7 +122,7 @@ extension Ticket {
 
 extension Ticket {
     // 예매 시간 구조체
-    struct TicketcingTime: Hashable, Comparable {
+    struct TicketcingTime: Codable, Hashable, Comparable {
         
         private let hour: Int
         private let minute: Int
@@ -95,6 +140,14 @@ extension Ticket {
             return [hour, minute]
                 .map { formatter($0) }
                 .joined(separator: ":")
+        }
+        
+        func endTime(by runTime: Int) -> String {
+            let totalMinute = hour * 60 + minute + runTime
+            let hour = totalMinute / 60 % 24
+            let minute = totalMinute % 60
+            
+            return TicketcingTime(hour: hour, minute: minute).cellForm()
         }
         
         static func < (lhs: Ticket.TicketcingTime, rhs: Ticket.TicketcingTime) -> Bool {
@@ -115,7 +168,7 @@ extension Ticket {
 
 extension Ticket {
     // 인원 수 구조체
-    struct NumberOfPeople {
+    struct NumberOfPeople: Codable {
         
         var totalPrice: Int {
             adult * 15000 + minor * 12000

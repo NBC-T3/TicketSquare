@@ -98,7 +98,7 @@ class Join: UIViewController, UITextFieldDelegate {
     //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
         self.navigationController?.navigationBar.isHidden = false;
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         
         view.addSubview(joinLabel)
         joinLabel.snp.makeConstraints {
@@ -148,13 +148,11 @@ class Join: UIViewController, UITextFieldDelegate {
     //회원가입 완료 후 메인페이지로 이동하는 Alert
     @objc
     private func joinBtnTapped() {
-        //MARK: UserDefaults로 회원가입 정보 저장
         UserDefaults.standard.set(id.text, forKey: "ID")
         UserDefaults.standard.set(password.text, forKey: "PW")
         UserDefaults.standard.set(name.text, forKey: "Name")
         UserDefaults.standard.set(phoneNumber.text, forKey: "PhoneNumber")
         UserDefaults.standard.set(birth.text, forKey: "Birth")
-        
         
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
