@@ -17,7 +17,7 @@ class MovieDetailViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: 30)
         label.textColor = .white
         return label
     }()
@@ -30,7 +30,7 @@ class MovieDetailViewController: UIViewController {
     
     private let overviewLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
         label.numberOfLines = 3 // 기본적으로 3줄까지만 표시
         label.isUserInteractionEnabled = true // 제스처 인식을 위해 활성화
@@ -60,7 +60,7 @@ class MovieDetailViewController: UIViewController {
     
     private let reserveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Reserve Now", for: .normal)
+        button.setTitle("예매하기", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 8
