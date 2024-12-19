@@ -21,8 +21,8 @@ class Login: UIViewController, UITextFieldDelegate {
     private let id: UITextField = UITextField().then {
         $0.placeholder = "아이디"
         $0.font = UIFont.systemFont(ofSize: 25)
-        $0.backgroundColor = .gray
-        $0.textColor = .darkGray
+        $0.backgroundColor = .lightGray
+        $0.textColor = .black
         $0.borderStyle = .roundedRect
         
         $0.keyboardType = .emailAddress
@@ -32,8 +32,8 @@ class Login: UIViewController, UITextFieldDelegate {
     private let password: UITextField = UITextField().then {
         $0.placeholder = "비밀번호"
         $0.font = UIFont.systemFont(ofSize: 25)
-        $0.backgroundColor = .gray
-        $0.textColor = .darkGray
+        $0.backgroundColor = .lightGray
+        $0.textColor = .black
         $0.borderStyle = .roundedRect
         
         $0.keyboardType = .default
@@ -42,8 +42,8 @@ class Login: UIViewController, UITextFieldDelegate {
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
-        $0.backgroundColor = .darkGray
-        $0.setTitleColor(.gray, for: .normal)
+        $0.backgroundColor = .gray
+        $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 4
         $0.addTarget(self, action: #selector(loginBtnTapped), for: .touchDown)
     }
@@ -77,25 +77,25 @@ class Login: UIViewController, UITextFieldDelegate {
         }
         view.addSubview(id)
         id.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(loginLabel.snp.bottom)
             $0.height.equalTo(50)
         }
         view.addSubview(password)
         password.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(id.snp.bottom).offset(10)
             $0.height.equalTo(50)
         }
         view.addSubview(loginBtn)
         loginBtn.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(password.snp.bottom).offset(20)
             $0.height.equalTo(50)
         }
         view.addSubview(joinBtn)
         joinBtn.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.top.equalTo(loginBtn.snp.bottom).offset(20)
         }
     }
