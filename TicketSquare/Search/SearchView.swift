@@ -10,10 +10,13 @@ import SnapKit
 
 class SearchView: UIView {
     
+    private let searchBarTappedStatus = false//서치바 상태
+    
     //MARK: 검색바
-    private let searchBar: UISearchBar = {
+    let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
         searchBar.tintColor = .red
+//        searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.searchTextField.font = .systemFont(ofSize: 18)
         searchBar.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
@@ -126,5 +129,8 @@ class SearchView: UIView {
             $0.bottom.equalTo(safeArea).offset(-40)
         }
     }
+    
+    
+    
     
 }

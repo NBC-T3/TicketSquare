@@ -87,16 +87,21 @@ class SearchCollectionViewCell: UICollectionViewCell {
     @objc private func buttonTapped() {
         //TODO: 상세페이지 이동
     }
-    
-    var buttonAction: (() -> Void)?
 
     //MARK: 이미지 세팅 메소드
-    func configure(_ urlString: String) {
-        fetchImage(urlString)//이미지 호출
+    func configure(_ movie: MovieDetails) {
+        print("configure")
+        
+        let urlString = APIManager.shared.getImageURL(for: movie.posterPath ?? "")
+        fetchImage(urlString)//이미지 호출 & 이미지뷰 세팅
+        
+        titleLabel.text = movie.title
+        genreLabel.text = movie.genresDescribing()
     }
     
     //MARK: 이미지 호출 - READ
     private func fetchImage(_ urlString: String) {
+        print("이미지 호출")
         guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
 
