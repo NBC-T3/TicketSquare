@@ -17,7 +17,7 @@ class SearchView: UIView {
         var searchBar = UISearchBar()
         searchBar.tintColor = .red
 //        searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "영화를 검색해보세요."
+        searchBar.placeholder = "영화 키워드 검색"
         searchBar.searchTextField.font = .systemFont(ofSize: 18)
         searchBar.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
         return searchBar
