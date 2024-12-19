@@ -15,11 +15,12 @@ class SearchView: UIView {
     //MARK: 검색바
     let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
-        searchBar.tintColor = .red
-//        searchBar.searchBarStyle = .minimal
+        searchBar.tintColor = .white
+        searchBar.searchBarStyle = .minimal//서치바 테두리 제거
         searchBar.placeholder = "영화 키워드 검색"
         searchBar.searchTextField.font = .systemFont(ofSize: 18)
-        searchBar.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
+        searchBar.backgroundColor = .gray
+        searchBar.layer.cornerRadius = 10
         return searchBar
     }()
     
@@ -28,7 +29,7 @@ class SearchView: UIView {
         button.setTitle("검색", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .white
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = 10
         return button
     }()
     
@@ -106,7 +107,7 @@ class SearchView: UIView {
             $0.centerY.equalTo(searchBar)
             $0.trailing.equalToSuperview()
             $0.width.equalTo(80)
-            $0.height.equalTo(45)
+            $0.height.equalTo(50)
         }
         
         titleLabel.snp.makeConstraints {
