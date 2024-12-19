@@ -12,7 +12,7 @@ final class TicketingViewController: UIViewController {
     
     private var timeDatas: [Ticket.TicketcingTime] = []
     
-    private var movieDetail: MovieDetails?
+    private var movieDetails: MovieDetails? = .init(title: "제목", overview: "어쩌구", releaseDate: "312312412451", posterPath: "", runtime: 123, genres: [])
     
     private var ticketingDate: Ticket.TicketingDate = .init(from: Date.now)
     private var ticketingTime: Ticket.TicketcingTime? = nil {
@@ -27,7 +27,9 @@ final class TicketingViewController: UIViewController {
     }
     
     private var isSet: Bool {
-        ticketingTime != nil && numberOfPeople.totalPrice != 0
+        movieDetails != nil &&
+        ticketingTime != nil &&
+        numberOfPeople.totalPrice != 0
     }
     
     // 헤더 라벨 뷰
@@ -57,13 +59,12 @@ final class TicketingViewController: UIViewController {
     private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         
-        
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
         datePicker.timeZone = .autoupdatingCurrent
         datePicker.tintColor = .white
         datePicker.overrideUserInterfaceStyle = .dark
-
+        
         datePicker.addTarget(self,
                              action: #selector(datePickerValueChanged),
                              for: .valueChanged)
@@ -75,7 +76,7 @@ final class TicketingViewController: UIViewController {
     private let timeCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize.width = (UIScreen.main.bounds.width - 70) / 4
-        flowLayout.itemSize.height = 50
+        flowLayout.itemSize.height = 80
         flowLayout.minimumInteritemSpacing = 10
         flowLayout.minimumLineSpacing = 10
         let collectionView = UICollectionView(frame: .zero,
@@ -101,7 +102,7 @@ final class TicketingViewController: UIViewController {
     // 어른 인원 수 스텝퍼
     private lazy var adultStepper: TicketingStepper = {
         let stepper = TicketingStepper()
-        stepper.setColor(.gray)
+        stepper.setColor(.white.withAlphaComponent(0.2))
         stepper.setTitle("일반")
         
         stepper.onDecreaseButton = { [weak self] in
@@ -117,7 +118,7 @@ final class TicketingViewController: UIViewController {
     // 청소년 인원 수 스텝퍼
     private lazy var minorStepper: TicketingStepper = {
         let stepper = TicketingStepper()
-        stepper.setColor(.gray)
+        stepper.setColor(.white.withAlphaComponent(0.2))
         stepper.setTitle("청소년")
         
         stepper.onDecreaseButton = { [weak self] in
@@ -191,6 +192,8 @@ final class TicketingViewController: UIViewController {
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
         button.backgroundColor = .lightGray.withAlphaComponent(0.1)
+        
+        button.addTarget(nil, action: #selector(paymentButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -295,7 +298,7 @@ extension TicketingViewController {
             $0.top.equalTo(datePicker.snp.bottom).offset(80)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(260)
+            $0.height.equalTo(400)
         }
         
         stepperStackView.snp.makeConstraints {
@@ -328,10 +331,15 @@ extension TicketingViewController {
 
 extension TicketingViewController: UICollectionViewDataSource {
     
+    func configure(_ movieDetails: MovieDetails) {
+        self.movieDetails = movieDetails
+        headerLabel.text = movieDetails.title
+    }
+    
     // 데이터 설정
     private func setUpTimeDatas() {
         self.timeDatas = MockData.timeDatas[self.ticketingDate]?.sorted(by: <) ?? []
-
+        
         timeCollectionView.reloadData()
     }
     
@@ -351,10 +359,12 @@ extension TicketingViewController: UICollectionViewDataSource {
     
     // 셀 설정 및 반환
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TicketingTimeCollectionViewCell.id, for: indexPath) as? TicketingTimeCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TicketingTimeCollectionViewCell.id, for: indexPath) as? TicketingTimeCollectionViewCell, let runTime = movieDetails?.runtime else { return UICollectionViewCell() }
         
         let time = timeDatas[indexPath.item]
-        cell.setData(time)
+        let startTime = time.cellForm()
+        let endTime = time.endTime(by: runTime)
+        cell.setTime(startTime: startTime, endTime: endTime)
         
         return cell
     }
@@ -384,9 +394,12 @@ extension TicketingViewController: UICollectionViewDelegate {
     
     // 셀 선택 후
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell,
-              let time = cell.didSelected() else { return }
-        ticketingTime = time
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TicketingTimeCollectionViewCell else { return }
+        
+        cell.didSelected()
+        
+        let time = timeDatas[indexPath.item]
+        self.ticketingTime = time
     }
     
     // 셀 선택 해제 후
@@ -404,6 +417,70 @@ extension TicketingViewController: UICollectionViewDelegate {
 
 extension TicketingViewController {
     
+    @objc
+    private func paymentButtonTapped() {
+        let result = saveTicket()
+        presentResultAlert(result)
+    }
     
+    
+    enum ResultStyle {
+        case success
+        case failure
+        
+        var title: String {
+            switch self {
+            case .success: return "결제 완료"
+            case .failure: return "결제 실패"
+            }
+        }
+        
+        var message: String {
+            switch self {
+            case .success: return "결제가 완료되었습니다."
+            case .failure: return "결제를 실패했습니다."
+            }
+        }
+    }
+    
+    private func presentResultAlert(_ result: ResultStyle) {
+        let alert = UIAlertController(title: result.title,
+                                      message: result.message,
+                                      preferredStyle: .alert)
+        
+        switch result {
+        case .success:
+            let alertAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            }
+            alert.addAction(alertAction)
+            
+        case .failure:
+            let alertAction = UIAlertAction(title: "확인", style: .cancel)
+            alert.addAction(alertAction)
+        }
+        
+        present(alert, animated: true)
+    }
+    
+    private func saveTicket() -> ResultStyle {
+        guard let ticket = ticket() else { return .failure }
+        TicketManager().creat(ticket)
+        return .success
+    }
+    
+    private func ticket() -> Ticket? {
+        guard let movieDetails,
+              let ticketingTime else { return nil }
+        
+        let ticket = Ticket(movieDetails: movieDetails,
+                            ticketingDate: ticketingDate,
+                            ticketcingTime: ticketingTime,
+                            numberOfPeople: numberOfPeople)
+        
+        return ticket
+    }
     
 }

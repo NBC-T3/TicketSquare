@@ -24,10 +24,11 @@ class TicketingStepper: UIView {
         label.font = .systemFont(ofSize: 23, weight: .bold)
         label.textAlignment = .left
         
+        
         return label
     }()
     
-    //
+    // 
     private let stepperlStackView: UIStackView = {
         let stackView = UIStackView()
         
@@ -39,6 +40,8 @@ class TicketingStepper: UIView {
         
         stackView.clipsToBounds = true
         stackView.layer.cornerRadius = 8
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = UIColor.white.cgColor
         
         return stackView
     }()
@@ -72,11 +75,14 @@ class TicketingStepper: UIView {
         
         label.font = .systemFont(ofSize: 20)
         label.textAlignment = .center
-        label.backgroundColor = .white
+        label.backgroundColor = .black
+        label.textColor = .white
         
         label.layer.cornerRadius = 2
         label.clipsToBounds = true
         
+        label.layer.borderWidth = 1
+        label.layer.borderColor = UIColor.white.cgColor
         return label
     }()
     
@@ -151,8 +157,8 @@ extension TicketingStepper {
     // 스텝퍼 버튼 기본 설정
     private func stepperButton(_ type: StepperButtonType) -> UIButton {
         let button = UIButton()
-        button.setImage(type.title, for: .normal)
-//        button.setTitleColor(.red, for: .highlighted)
+        button.setImage(type.image, for: .normal)
+
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = .white
         button.backgroundColor = .clear
@@ -199,11 +205,13 @@ extension TicketingStepper {
         case increase
         case decrease
         
-        var title: UIImage? {
+        var image: UIImage? {
             switch self {
-            case .increase: return UIImage(systemName: "plus")
+            case .increase:
+                return UIImage(systemName: "plus")
                 
-            case .decrease: return UIImage(systemName: "minus")
+            case .decrease:
+                return UIImage(systemName: "minus")
             }
         }
     }

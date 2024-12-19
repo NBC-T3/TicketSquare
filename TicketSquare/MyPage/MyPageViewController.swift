@@ -40,6 +40,11 @@ class MyPageViewController: UIViewController {
         configureTableView()
     }
     
+    private func configureData() {
+        let tickets = TicketManager().read()
+        self.tickets = tickets
+    }
+    
     private func configureUI() {
         
         [
