@@ -1,62 +1,74 @@
-import UIKit
+
+
+
+
+
 import SnapKit
+import UIKit
 
 class MovieDetailViewController: UIViewController {
     
     // 영화 데이터
-    var movieDetails: MovieDetails!
-    
+    var movieDetails: MovieDetails?
+    var posterImage: UIImage?
+    var onPushViewController: ((UIViewController) -> Void)?
     // MARK: - UI 요소 선언
-    
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
         return imageView
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: 30)
         label.textColor = .white
-        return label
-    }()
-    
-    private let overviewLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .white
-        label.numberOfLines = 3 // 기본적으로 3줄까지만 표시
-        label.isUserInteractionEnabled = true // 제스처 인식을 위해 활성화
         return label
     }()
     
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .white
         return label
     }()
     
     private let runtimeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .white
         return label
     }()
     
     private let genresLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .white
+        return label
+    }()
+    
+    private let overviewScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.isScrollEnabled = false // 초기 상태에서는 스크롤 비활성화
+        return scrollView
+    }()
+    
+    private let overviewLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = .white
+        label.numberOfLines = 3
         return label
     }()
     
     private let reserveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Reserve Now", for: .normal)
+        button.setTitle("예매하기", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = UIColorStyle.bg
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
@@ -64,42 +76,29 @@ class MovieDetailViewController: UIViewController {
         return button
     }()
     
-    private let verticalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        stackView.alignment = .top
-        return stackView
-    }()
-    
-    private let horizontalStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 16
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
-    
     private var isOverviewExpanded = false
-    private var reserveButtonBottomConstraint: Constraint?
+    private var fullOverviewText: String? // 전체 개요 텍스트 저장
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        updateUI()
         layoutUI()
         addGestureToOverviewLabel()
-        fetchMovieDetails()
     }
     
     // MARK: - UI 배치
     private func layoutUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         
-        [posterImageView, horizontalStackView, overviewLabel, reserveButton].forEach { view.addSubview($0) }
+        [posterImageView, overviewScrollView, reserveButton].forEach { view.addSubview($0) }
         
-        [titleLabel, releaseDateLabel, runtimeLabel, genresLabel].forEach { verticalStackView.addArrangedSubview($0) }
+        let verticalStackView = UIStackView(arrangedSubviews: [titleLabel, releaseDateLabel, runtimeLabel, genresLabel])
+        verticalStackView.axis = .vertical
+        verticalStackView.spacing = 5
+        verticalStackView.alignment = .top
+        view.addSubview(verticalStackView)
         
-        horizontalStackView.addArrangedSubview(verticalStackView)
+        overviewScrollView.addSubview(overviewLabel)
         
         posterImageView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top)
@@ -107,18 +106,24 @@ class MovieDetailViewController: UIViewController {
             make.height.equalTo(view.snp.height).multipliedBy(0.6)
         }
         
-        horizontalStackView.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom).offset(16)
+        verticalStackView.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        overviewScrollView.snp.makeConstraints { make in
+            make.top.equalTo(verticalStackView.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(80)
         }
         
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(horizontalStackView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
         }
         
         reserveButton.snp.makeConstraints { make in
-            make.top.equalTo(overviewLabel.snp.bottom).offset(20)
+            make.top.equalTo(overviewScrollView.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
             make.height.equalTo(50)
             make.width.equalTo(300)
@@ -126,99 +131,82 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    // MARK: - 기본 데이터 설정
-    private func configureUI() {
-        titleLabel.text = "Loading..."
-        overviewLabel.text = ""
-        releaseDateLabel.text = ""
-        runtimeLabel.text = ""
-        genresLabel.text = ""
-    }
-    
     private func addGestureToOverviewLabel() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleOverviewExpansion))
-        overviewLabel.addGestureRecognizer(tapGesture)
+        overviewScrollView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func toggleOverviewExpansion() {
         isOverviewExpanded.toggle()
         
-        overviewLabel.numberOfLines = isOverviewExpanded ? 0 : 3
-        
         UIView.animate(withDuration: 0.3) {
-            // 숨겨진 예매 버튼의 위치를 레이아웃 조정에 따라 업데이트
-            self.reserveButtonBottomConstraint?.update(offset: self.isOverviewExpanded ? -40 : -20)
+            if self.isOverviewExpanded {
+                self.overviewLabel.numberOfLines = 0
+                self.overviewLabel.text = self.fullOverviewText // 전체 텍스트 표시
+                self.overviewScrollView.isScrollEnabled = true
+                self.overviewScrollView.snp.updateConstraints { make in
+                    make.height.equalTo(200)
+                }
+            } else {
+                self.overviewLabel.numberOfLines = 3
+                self.overviewLabel.text = self.firstSentence(from: self.fullOverviewText) // 첫 문장만 표시
+                self.overviewScrollView.isScrollEnabled = false
+                self.overviewScrollView.snp.updateConstraints { make in
+                    make.height.equalTo(80)
+                }
+            }
             self.view.layoutIfNeeded()
         }
     }
     
-    // 메인 뷰에서 데이터 받아서 데이터 연결 예정 ....
-//    // MARK: - 데이터 설정
-//    private func configureUI() {
-//        guard let movie = movie else { return }
-//        titleLabel.text = movie.title
-//        overviewLabel.text = movie.overview
-//        runtimeLabel.text = "Runtime: \(movie.runtime) minutes"
-//        genresLabel.text = "Genres: \(movie.genres.joined(separator: ", "))"
-//        posterImageView.image = movie.posterImage
-//    }
+    func configure(with details: MovieDetails, posterImage: UIImage) {
+        self.movieDetails = details
+        self.posterImage = posterImage
+        updateUI()
+    }
     
-    // API 요청해서 더미 데이터 추출 중... 삭제 예정
-    // MARK: - API 호출
-    private func fetchMovieDetails() {
-        APIManager.shared.fetchNowPlayingMovies(page: 1) { [weak self] movies, error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Error fetching movies: \(error.localizedDescription)")
-                return
-            }
-            guard let movies = movies, let firstMovie = movies.first else {
-                print("No movies available.")
-                return
-            }
-            let movieID = firstMovie.id
-            print("Selected Movie ID: \(movieID)")
+    private func updateUI() {
+        if let details = movieDetails {
+            titleLabel.text = details.title
+            releaseDateLabel.text = "개봉일: \(details.releaseDate)"
+            runtimeLabel.text = "상영 시간: \(details.runtime) 분"
+            genresLabel.text = "장르: \(details.genres.map { $0.name }.joined(separator: ", "))"
+            fullOverviewText = details.overview // 전체 텍스트 저장
+            overviewLabel.text = firstSentence(from: details.overview) // 첫 문장만 표시
             
-            self.fetchDetails(for: movieID)
+            if let posterImage = posterImage {
+                posterImageView.image = posterImage
+            } else {
+                posterImageView.image = UIImage(named: "placeholder")
+            }
+        } else {
+            titleLabel.text = "Loading..."
+            overviewLabel.text = ""
+            releaseDateLabel.text = ""
+            runtimeLabel.text = ""
+            genresLabel.text = ""
         }
     }
     
-    private func fetchDetails(for movieID: Int) {
-        APIManager.shared.fetchMovieDetails(movieID: movieID) { [weak self] details, error in
-            guard let self = self, let details = details else {
-                print("Error fetching movie details: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.titleLabel.text = details.title
-                self.overviewLabel.text = details.overview
-                self.releaseDateLabel.text = "ReleaseDate: \(details.releaseDate)"
-                self.runtimeLabel.text = "Runtime: \(details.runtime) minutes"
-                self.genresLabel.text = "Genres: \(details.genres.map { $0.name }.joined(separator: ", "))"
-                
-                // 포스터 이미지 설정
-                if let posterPath = details.posterPath {
-                    APIManager.shared.fetchImage(from: posterPath) { image in
-                        if let image = image {
-                            DispatchQueue.main.async {
-                                self.posterImageView.image = image
-                            }
-                        } else {
-                            print("Failed to load poster image")
-                        }
-                    }
-                }
-            }
+    private func firstSentence(from text: String?) -> String? {
+        guard let text = text else { return nil }
+        let delimiters: CharacterSet = [".", "!"]
+        if let range = text.rangeOfCharacter(from: delimiters) {
+            return String(text[..<range.upperBound]) // 첫 번째 문장 반환
         }
+        return text // 구분자가 없으면 전체 텍스트 반환
     }
     
     // MARK: - 예매 버튼 액션
     @objc private func reserveButtonTapped() {
-        let alert = UIAlertController(title: "Reservation", message: "Reservation successful!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-        //let reservationVC = ReservationViewController() // 예매 페이지로 이동
-        //navigationController?.pushViewController(reservationVC, animated: true)
+        dismiss(animated: true){ [weak self] in
+            guard let self,
+                  let movieDetails = self.movieDetails else { return }
+            
+            let ticketingViewController = TicketingViewController()
+            ticketingViewController.configure(movieDetails)
+            
+            self.onPushViewController?(ticketingViewController)
+        }
     }
 }

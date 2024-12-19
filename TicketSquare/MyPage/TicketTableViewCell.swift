@@ -40,7 +40,7 @@ class TicketTableViewCell: UITableViewCell {
         
         label.text = "Title"
         label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.backgroundColor = .clear
+        label.backgroundColor = UIColorStyle.bg
         label.textColor = .white
         
         return label
@@ -51,7 +51,7 @@ class TicketTableViewCell: UITableViewCell {
         
         label.text = "0000-00-00 00:00"
         label.font = .systemFont(ofSize: 17)
-        label.backgroundColor = .clear
+        label.backgroundColor = UIColorStyle.bg
         label.textColor = .white
         label.textAlignment = .right
 
@@ -64,7 +64,7 @@ class TicketTableViewCell: UITableViewCell {
         
         label.text = "어른 3명, 청소년 2명"
         label.font = .systemFont(ofSize: 17)
-        label.backgroundColor = .clear
+        label.backgroundColor = UIColorStyle.bg
         label.textColor = .white
         label.textAlignment = .right
         

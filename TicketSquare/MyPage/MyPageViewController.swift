@@ -10,7 +10,7 @@ import SnapKit
 
 class MyPageViewController: UIViewController {
     
-    private var tickets: [Ticket] = MockData.tickets
+    private var tickets: [Ticket] = []
     
     private let editButton: UIButton = {
         let button = makeButton("개인정보 변경")
@@ -20,7 +20,7 @@ class MyPageViewController: UIViewController {
     
     private let ticketTableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = UIColorStyle.bg
         return tableView
     }()
     
@@ -35,9 +35,14 @@ class MyPageViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         configureUI()
         configureTableView()
+    }
+    
+    private func configureData() {
+        let tickets = TicketManager().read()
+        self.tickets = tickets
     }
     
     private func configureUI() {

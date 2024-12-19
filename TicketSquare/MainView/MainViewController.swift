@@ -20,12 +20,11 @@ class MainViewController: UIViewController {
     
     private var autoScrollTimer: Timer?  // 자동 스크롤 타이머
     private var currentPage = 0  // 현재 페이지 인덱스
-    private var isUserScrolling = false // 사용자가 스크롤 중인지 상태를 나타내는 플래그
     
     // 제목 영역을 감싸는 컨테이너 뷰
     private let titleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         return view
     }()
     
@@ -53,7 +52,7 @@ class MainViewController: UIViewController {
         // UICollectionView 초기화 및 설정
         let collectionView = UICollectionView(
             frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = UIColorStyle.bg
         return collectionView
     }()
     
@@ -75,6 +74,7 @@ class MainViewController: UIViewController {
     }
     
     private func startAutoScroll() {
+        stopAutoScroll()
         autoScrollTimer = Timer.scheduledTimer(
             timeInterval: 3.0,  // 3초마다 실행
             target: self,
@@ -89,24 +89,20 @@ class MainViewController: UIViewController {
         autoScrollTimer = nil
     }
     
+    // 다음 페이지로 스크롤
     @objc private func scrollToNextPage() {
+        let totalItems = collectionView.numberOfItems(inSection: 0)
+        guard totalItems > 0 else { return }
         
-        guard !isUserScrolling else { return }
+        let nextPage = (currentPage + 1) % totalItems  // 다음 페이지 계산
+        let nextIndexPath = IndexPath(item: nextPage, section: 0)
         
-        // 인기 영화 섹션 (섹션 0)에 대한 자동 스크롤 처리
-        let section = 0
-        
-        let totalItems = collectionView.numberOfItems(inSection: section) // 섹션에 있는 총 아이템 개수를 가져옴
-        guard totalItems > 0 else { return } // 아이템이 없는 경우 종료
-        
-        currentPage = (currentPage + 1) % totalItems // 다음 페이지로 이동
-        
-        let indexPath = IndexPath(item: currentPage, section: section)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        collectionView.scrollToItem(at: nextIndexPath, at: .centeredVertically, animated: true)
+        currentPage = nextPage  // 현재 페이지 업데이트
     }
     
     private func setupViews() {
-        view.backgroundColor = .black  // 전체 화면 배경색 설정
+        view.backgroundColor = UIColorStyle.bg  // 전체 화면 배경색 설정
         
         // 제목 컨테이너 뷰 추가
         view.addSubview(titleView)
@@ -302,41 +298,6 @@ class MainViewController: UIViewController {
 // 데이터 소스 설정
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        // 사용자가 스크롤을 시작했을 때
-        isUserScrolling = true
-        stopAutoScroll()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        // 사용자가 스크롤을 멈췄을 때
-        if !decelerate {
-            updateCurrentPage(for: scrollView)
-            restartAutoScroll()
-        }
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // 스크롤 감속이 완료되었을 때
-        updateCurrentPage(for: scrollView)
-        restartAutoScroll()
-    }
-    
-    private func updateCurrentPage(for scrollView: UIScrollView) {
-        let section = 0
-        let visibleCenter = CGPoint(x: scrollView.contentOffset.x + scrollView.frame.size.width / 1, y: scrollView.frame.size.height / 1)
-        if let indexPath = collectionView.indexPathForItem(at: visibleCenter) {
-            currentPage = indexPath.item // 현재 보이는 페이지로 업데이트
-        }
-    }
-
-    private func restartAutoScroll() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
-            guard let self = self else { return }
-            self.isUserScrolling = false
-            self.startAutoScroll()
-        }
-    }
     
     // 섹션 개수 변환
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -344,9 +305,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     // 각 섹션의 아이템 개수 반환
-    func collectionView(
-        _ collectionView: UICollectionView, numberOfItemsInSection section: Int
-    ) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let movieSection = MovieSection(rawValue: section) else {
             return 0
         }  // 각 섹션에 있는 아이템의 개수를 반환하는 메서드
@@ -358,11 +317,14 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         }
     }
     
+    // 사용자가 스크롤할 경우 자동 스크롤 중지
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        stopAutoScroll()
+    }
+    
     
     // 각 아이템의 셀 생성
-    func collectionView(
-        _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let movieSection = MovieSection(rawValue: indexPath.section)
         else {
             return UICollectionViewCell()
@@ -375,8 +337,13 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                 withReuseIdentifier: PagingImageCell.identifier,
                 for: indexPath) as! PagingImageCell
             let movie = popularMovies[indexPath.item]
-            cell.configure(
-                with: APIManager.shared.getImageURL(for: movie.posterPath))
+            cell.configure(with: movie)
+            
+            // 버튼 액션 설정
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
+            }
+            
             return cell
             
         case .upcoming:  // 나머지 영화: 장르 포함
@@ -386,6 +353,12 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                 for: indexPath) as! SmallImageCell
             let movie = upcomingMovies[indexPath.item]
             cell.configure(by: movie)
+            
+            // 버튼 액션 추가
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
+            }
+            
             return cell
             
         case .nowPlaying:
@@ -395,6 +368,11 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                 for: indexPath) as! SmallImageCell
             let movie = nowPlayingMovies[indexPath.item]
             cell.configure(by: movie)
+            
+            // 버튼 액션 추가
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
+            }
             return cell
             
         case .topRated:
@@ -404,15 +382,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                 for: indexPath) as! SmallImageCell
             let movie = topRatedMovies[indexPath.item]
             cell.configure(by: movie)
+            
+            // 버튼 액션 추가
+            cell.buttonAction = { [weak self] movieDetails, image in
+                self?.presentMovieDetailView(movieDetails: movieDetails, image: image)
+            }
             return cell
         }
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
         // 헤더의 경우에만 처리
         if kind == UICollectionView.elementKindSectionHeader {
             guard let section = MovieSection(rawValue: indexPath.section), section != .popular else {
@@ -420,11 +400,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
 
             // SectionHeaderView 반환
-            let headerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: HeaderView.identifier,
-                for: indexPath
-            ) as! HeaderView
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.identifier, for: indexPath) as! HeaderView
 
             // 섹션에 따른 헤더 타이틀 설정
             switch section {
@@ -450,5 +426,19 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         case .topRated: return topRatedMovies[index]
         default: fatalError("Invalid section")
         }
+    }
+    
+    private func presentMovieDetailView(movieDetails: MovieDetails, image: UIImage) {
+        let detailsVC = MovieDetailViewController()
+        detailsVC.configure(with: movieDetails, posterImage: image)
+        detailsVC.onPushViewController = { [weak self] viewController in
+            guard let self else {
+                print("1")
+                return }
+            self.navigationController?.pushViewController(viewController, animated: true)
+
+            print(self.navigationController)
+        }
+        self.present(detailsVC, animated: true)
     }
 }
