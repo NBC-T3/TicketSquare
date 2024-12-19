@@ -14,10 +14,10 @@ class MainTabBarController: UITabBarController {
         
         // 탭 추가 ( ViewController 들 연결 )
         let homeVC = createNavController(vc: MainViewController(), title: "Home", imageName: "house.fill")
-        //let searchVC = createNavController(vc: SearchViewController(), title: "Search", imageName: "magnifyingglass")
-        //let accountVC = createNavController(vc: AccountViewController(), title: "Account", imageName: "person.fill")
+        let searchVC = createNavController(vc: SearchViewController(), title: "Search", imageName: "magnifyingglass")
+        let accountVC = createNavController(vc: MyPageViewController(), title: "Account", imageName: "person.fill")
         
-        //viewControllers = [homeVC, searchVC, accountVC]
+        viewControllers = [homeVC, searchVC, accountVC]
         
     }
     

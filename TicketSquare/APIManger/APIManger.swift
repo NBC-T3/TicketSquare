@@ -15,6 +15,7 @@ class APIManager {
     private let imageBaseURL = "https://image.tmdb.org/t/p/w500"
     private let APIKey = Bundle.main.infoDictionary?["APIKey"] as! String
     
+    private let language: String = "ko-KR"
     
     private lazy var headers: HTTPHeaders = [
         "accept": "application/json",
@@ -26,7 +27,7 @@ class APIManager {
     func fetchNowPlayingMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
-            "language": "en-US",
+            "language": language,
             "page": page
         ]
         
@@ -49,7 +50,7 @@ class APIManager {
     func fetchUpcomingMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
-            "language": "en-US",
+            "language": language,
             "page": page
         ]
         
@@ -72,7 +73,7 @@ class APIManager {
     func fetchPopularMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
-            "language": "en-US",
+            "language": language,
             "page": page
         ]
         
@@ -95,7 +96,7 @@ class APIManager {
     func fetchTopRatedMovies(page: Int, _ completion: @escaping ([Movie]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
-            "language": "en-US",
+            "language": language,
             "page": page
         ]
         
@@ -143,10 +144,13 @@ class APIManager {
     /// 영화 세부 정보 가져오기
     /// response -> tittle, overview, releaseDate, runtime, genres array( id, name)
     func fetchMovieDetails(movieID: Int, completion: @escaping (MovieDetails?, Error?) -> Void) {
+        let parameters: [String: Any] = [
+            "language": language
+        ]
         
         let url = "\(baseURL)/movie/\(movieID)"
-        AF.request(url, method: .get, headers: headers)
-            .validate()
+        
+        AF.request(url, method: .get, parameters: parameters, headers: headers).validate()
             .responseDecodable(of: MovieDetails.self) { response in
                 switch response.result {
                 case .success(let movieDetails):
@@ -163,7 +167,7 @@ class APIManager {
     func fetchKeywordsMovies(movieID: Int, _ completion: @escaping ([Keyword]?, Error?) -> Void) {
         
         let parameters: [String: Any] = [
-            "language": "en-US"
+            "language": language
         ]
         
         let url = "\(baseURL)/movie/\(movieID)/keywords"
