@@ -38,9 +38,8 @@ class TicketTableViewCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Title"
         label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.backgroundColor = UIColorStyle.bg
+        label.backgroundColor = .clear
         label.textColor = .white
         
         return label
@@ -48,23 +47,21 @@ class TicketTableViewCell: UITableViewCell {
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        
-        label.text = "0000-00-00 00:00"
+
         label.font = .systemFont(ofSize: 17)
-        label.backgroundColor = UIColorStyle.bg
+        label.backgroundColor = .clear
         label.textColor = .white
         label.textAlignment = .right
-
-
+        
+        
         return label
     }()
     
     private let peopleCountLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "어른 3명, 청소년 2명"
-        label.font = .systemFont(ofSize: 17)
-        label.backgroundColor = UIColorStyle.bg
+        label.font = .systemFont(ofSize: 24)
+        label.backgroundColor = .clear
         label.textColor = .white
         label.textAlignment = .right
         
@@ -79,6 +76,7 @@ class TicketTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     private func configureUI() {
         backgroundColor = .white.withAlphaComponent(0.07)
@@ -96,19 +94,50 @@ class TicketTableViewCell: UITableViewCell {
             peopleCountLabel
         ].forEach { stackView.addArrangedSubview($0) }
         
-
+        
         posterImageView.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview()
-            $0.width.equalTo(90)
+            $0.width.equalTo(140)
         }
         
         stackView.snp.makeConstraints {
             $0.top.bottom.trailing.equalToSuperview().inset(10)
-            $0.leading.equalTo(posterImageView.snp.trailing).offset(30)
+            $0.leading.equalTo(posterImageView.snp.trailing).offset(10)
         }
     }
     
     func configure(_ ticket: Ticket) {
         self.ticket = ticket
+        updateCountOfPeople()
+        updateTitleLabel()
+        updateReleaseDate()
+        updatePosterImage()
+    }
+    
+    private func updateCountOfPeople() {
+        guard let ticket else { return }
+        self.peopleCountLabel.text = String(describing: ticket.numberOfPeople)
+    }
+    
+    private func updateTitleLabel() {
+        guard let title = ticket?.movieDetails?.title else { return }
+        self.titleLabel.text = title
+    }
+    
+    private func updateReleaseDate() {
+        guard let schedule = ticket?.scheduleDescribing() else { return }
+        self.timeLabel.text = schedule
+        
+    }
+    
+    private func updatePosterImage() {
+        guard let posterPath = ticket?.movieDetails?.posterPath else { return }
+        let url = APIManager.shared.getImageURL(for: posterPath)
+        
+        APIManager.shared.fetchImage(from: url) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.posterImageView.image = image
+            }
+        }
     }
 }
