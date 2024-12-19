@@ -26,6 +26,10 @@ class Join: UIViewController {
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
         
+        $0.keyboardType = .default
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .next
+        
         $0.becomeFirstResponder() //화면에서 가장 처음으로 포커스 주는 부분
         //$0.text = UserDefaults.standard.string(forKey: "Name")
     }
@@ -36,6 +40,10 @@ class Join: UIViewController {
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
         
+        $0.keyboardType = .default
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .next
+        
         //$0.text = UserDefaults.standard.string(forKey: "Birth")
     }
     private let phoneNumber: UITextField = UITextField().then {
@@ -44,6 +52,10 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        $0.keyboardType = .default
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .next
         
         //$0.text = UserDefaults.standard.string(forKey: "PhoneNumber")
     }
@@ -54,6 +66,10 @@ class Join: UIViewController {
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
         
+        $0.keyboardType = .emailAddress
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .next
+        
         //$0.text = UserDefaults.standard.string(forKey: "ID")
     }
     private let password: UITextField = UITextField().then {
@@ -62,6 +78,10 @@ class Join: UIViewController {
         $0.backgroundColor = .gray
         $0.textColor = .darkGray
         $0.layer.cornerRadius = 3
+        
+        $0.keyboardType = .default
+        $0.clearButtonMode = .whileEditing
+        $0.returnKeyType = .done
         
         //$0.text = UserDefaults.standard.string(forKey: "PW")
     }
