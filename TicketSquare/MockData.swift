@@ -37,19 +37,13 @@ struct MockData {
         return timeDatas
     }()
     
-//    static let ticketTimes: [Ticket.TicketcingTime] = {
-//        return [
-//            Ticket.TicketcingTime(hour: 1, minute: 50),
-//            Ticket.TicketcingTime(hour: 6, minute: 30),
-//            Ticket.TicketcingTime(hour: 10, minute: 10),
-//            Ticket.TicketcingTime(hour: 11, minute: 5),
-//            Ticket.TicketcingTime(hour: 11, minute: 20),
-//            Ticket.TicketcingTime(hour: 1, minute: 50),
-//            Ticket.TicketcingTime(hour: 6, minute: 30),
-//            Ticket.TicketcingTime(hour: 10, minute: 10),
-//            Ticket.TicketcingTime(hour: 11, minute: 5),
-//            Ticket.TicketcingTime(hour: 11, minute: 20),
-//            Ticket.TicketcingTime(hour: 23, minute: 30)
-//        ]
-//    }()
+    static let tickets: [Ticket] = {
+            var numberOfPeople = Ticket.NumberOfPeople()
+            numberOfPeople.addAdult()
+            numberOfPeople.addMinor()
+            
+            let ticket = Ticket(ticketingDate: .init(from: Date()), ticketcingTime: Ticket.TicketcingTime(hour: 11, minute: 30), numberOfPeople: numberOfPeople)
+            
+            return [ticket, ticket, ticket]
+        }()
 }
