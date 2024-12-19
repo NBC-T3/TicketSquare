@@ -29,7 +29,7 @@ class TicketTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         
         stackView.axis = .vertical
-        stackView.distribution = .fill
+        stackView.distribution = .equalCentering
         stackView.spacing = 15
         
         return stackView
@@ -38,7 +38,7 @@ class TicketTableViewCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         
-        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.font = .systemFont(ofSize: 25, weight: .bold)
         label.backgroundColor = .clear
         label.textColor = .white
         
@@ -48,7 +48,7 @@ class TicketTableViewCell: UITableViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
 
-        label.font = .systemFont(ofSize: 17)
+        label.font = .systemFont(ofSize: 14)
         label.backgroundColor = .clear
         label.textColor = .white
         label.textAlignment = .right
@@ -60,7 +60,7 @@ class TicketTableViewCell: UITableViewCell {
     private let peopleCountLabel: UILabel = {
         let label = UILabel()
         
-        label.font = .systemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 17)
         label.backgroundColor = .clear
         label.textColor = .white
         label.textAlignment = .right
@@ -101,7 +101,7 @@ class TicketTableViewCell: UITableViewCell {
         }
         
         stackView.snp.makeConstraints {
-            $0.top.bottom.trailing.equalToSuperview().inset(10)
+            $0.top.bottom.trailing.equalToSuperview().inset(20)
             $0.leading.equalTo(posterImageView.snp.trailing).offset(10)
         }
     }

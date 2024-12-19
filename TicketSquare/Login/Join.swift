@@ -149,11 +149,11 @@ class Join: UIViewController, UITextFieldDelegate {
     @objc
     private func joinBtnTapped() {
         //MARK: 회원가입 정보 저장
-        UserDefaults.standard.set(id.text, forKey: "ID")
-        UserDefaults.standard.set(password.text, forKey: "PW")
-        UserDefaults.standard.set(name.text, forKey: "Name")
-        UserDefaults.standard.set(phoneNumber.text, forKey: "PhoneNumber")
-        UserDefaults.standard.set(birth.text, forKey: "Birth")
+        UserDefaults.standard.set(id.text, forKey: UserInfo.Key.id)
+        UserDefaults.standard.set(password.text, forKey: UserInfo.Key.password)
+        UserDefaults.standard.set(name.text, forKey: UserInfo.Key.name)
+        UserDefaults.standard.set(phoneNumber.text, forKey: UserInfo.Key.phoneNumber)
+        UserDefaults.standard.set(birth.text, forKey: UserInfo.Key.birth)
         
         //TextField가 전부 채워졌는지 검증
         let textField = [id, password, name, phoneNumber, birth]
@@ -164,6 +164,9 @@ class Join: UIViewController, UITextFieldDelegate {
         }
         
     }
+    
+    
+
     
     //MARK: 키보드 설정
     //다른 공간 터치시 키보드 사라짐

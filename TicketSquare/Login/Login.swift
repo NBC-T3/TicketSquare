@@ -112,8 +112,8 @@ class Login: UIViewController, UITextFieldDelegate {
     @objc
     private func loginBtnTapped() {
         //UserDefaults에 저장되어있는 아이디와 비밀번호
-        let checkID = UserDefaults.standard.string(forKey: "ID")
-        let checkPW = UserDefaults.standard.string(forKey: "PW")
+        let checkID = UserDefaults.standard.string(forKey: UserInfo.Key.id)
+        let checkPW = UserDefaults.standard.string(forKey: UserInfo.Key.password)
         
         //사용자가 입력한 아이디와 비밀번호
         let userInputID = id.text
