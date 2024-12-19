@@ -12,82 +12,106 @@ class MyPageViewController: UIViewController {
     
     private var tickets: [Ticket] = []
     
-    private let editButton: UIButton = {
-        let button = makeButton("개인정보 변경")
-        
-        return button
-    }()
-    
     private let ticketTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColorStyle.bg
         return tableView
     }()
     
-    private let logOutButton: UIButton = {
-        let button = makeButton("로그아웃")
+    private let profileImage: UIImageView = {
+        let imageView = UIImageView()
         
-        return button
+        return imageView
     }()
     
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        
+        return stackView
+    }()
+    
+    private let nameLabel: UILabel = {
+        let label = profileLabel()
+        
+        return label
+    }()
+    
+    private let birthDateLabel: UILabel = {
+        let label = profileLabel()
+        
+        return label
+    }()
+    
+    private static func profileLabel() -> UILabel {
+        let label = UILabel()
+        
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        label.backgroundColor = .clear
+        
+        return label
+    }
+
+    
+    /*
+     이름
+     생년월일
+     전화번호
+     아이디
+     비밀번호
+     */
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = UIColorStyle.bg
         configureUI()
         configureTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureData()
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+    }
+    
     private func configureData() {
         let tickets = TicketManager().read()
         self.tickets = tickets
+        ticketTableView.reloadData()
     }
     
     private func configureUI() {
-        
         [
-            editButton,
-            ticketTableView,
-            logOutButton
+            ticketTableView
         ].forEach { view.addSubview($0) }
         
-        editButton.snp.makeConstraints {
-            $0.top.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
-        }
-        
-        logOutButton.snp.makeConstraints {
-            $0.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
-        }
+        [
+            nameLabel
+        ].forEach { view.addSubview($0) }
         
         ticketTableView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(editButton.snp.bottom).offset(20)
-            $0.bottom.equalTo(logOutButton.snp.top).offset(-20)
+            $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.6)
+            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
     }
     
-    private static func makeButton(_ title: String) -> UIButton {
-        let button = UIButton()
+    private func configureProfile() {
         
-        button.setTitle(title, for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.1)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18)
-        
-        button.snp.makeConstraints {
-            $0.width.equalTo(120)
-            $0.height.equalTo(35)
-        }
-        
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        button.layer.borderWidth = 1
-        
-        return button
     }
+    
 }
 
 
@@ -116,7 +140,7 @@ extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        120
+        220
     }
     
 }
