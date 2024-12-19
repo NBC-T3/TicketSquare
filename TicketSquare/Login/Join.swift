@@ -156,11 +156,8 @@ class Join: UIViewController, UITextFieldDelegate {
         UserDefaults.standard.set(birth.text, forKey: "Birth")
         
         //TextField가 전부 채워졌는지 검증
-        if id.text?.isEmpty == false,
-           password.text?.isEmpty == false,
-           name.text?.isEmpty == false,
-           phoneNumber.text?.isEmpty == false,
-           birth.text?.isEmpty == false {
+        let textField = [id, password, name, phoneNumber, birth]
+        if textField.allSatisfy({ !$0.text!.isEmpty }) {
             welcomAlert()
         } else {
             errorAlert()
