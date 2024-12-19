@@ -63,13 +63,16 @@ class Login: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         configureUI()
+        id.delegate = self
+        password.delegate = self
     }
     
     
     //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
+        self.navigationController?.navigationBar.isHidden = true;
+
         view.backgroundColor = .black
         
         view.addSubview(loginLabel)
@@ -102,10 +105,7 @@ class Login: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func gaerse() {
-        
-    }
-    
+
     //회원가입 버튼이 눌렸을 때
     @objc
     private func joinBtnTapped() {
@@ -119,6 +119,27 @@ class Login: UIViewController, UITextFieldDelegate {
 //        UserDefaults.standard.set(id.text, forKey: "ID")
 //        UserDefaults.standard.set(password.text, forKey: "Password")
     }
+    
+    @objc
+    private func textFieldDidChange(_ textField: UITextField) {
+        let isUsernameValid = !(id.text?.isEmpty ?? true)
+        let isPasswordValid = !(password.text?.isEmpty ?? true)
+        loginBtn.isEnabled = isUsernameValid && isPasswordValid
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        super.touchesBegan(touches, with: event)
+    }
+    
+    //다음 TextField로 포커스 이동
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if textField == id {
+                password.becomeFirstResponder() // 다음 필드로 포커스 이동
+            } else if textField == password {
+                textField.resignFirstResponder() // 키보드 숨기기
+            }
+            return true
+        }
 }
-
 
