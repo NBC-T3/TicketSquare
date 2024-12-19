@@ -35,7 +35,11 @@ struct MovieDetails: Decodable {
     let genres: [Genres]
     
     func genresDescribing() -> String {
-        genres.map { $0.name }.joined(separator: ", ")
+        if genres.count < 2 {
+            return genres.map { $0.name }.joined(separator: ", ")
+        } else {
+            return genres[0...1].map { $0.name }.joined(separator: ", ")
+        }
     }
     
     enum CodingKeys: String, CodingKey {
