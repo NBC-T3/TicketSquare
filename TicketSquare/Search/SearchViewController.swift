@@ -12,11 +12,11 @@ class SearchViewController: UIViewController {
     
     private var searchView = SearchView()
     
-    private var movies: [Movie] = []
+    private var nowPlayingMovies: [Movie] = []
         
     override func viewDidLoad() {
         view.backgroundColor = .black
-        getNowPlayingMovies()
+        fetchNowPlayingMovies()
         setUpView()
     }
     
@@ -49,13 +49,6 @@ class SearchViewController: UIViewController {
         }
     }
     
-    //MARK: 더미데이터
-    var dummyData: [String] = [
-        "베놈",
-        "해리포터",
-        "스파이더맨"
-    ]
-    
     // 작은 이미지 URL 배열
     private let smallImageURLs = [
         "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
@@ -63,11 +56,17 @@ class SearchViewController: UIViewController {
         "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg"
     ]
     
-    private func getNowPlayingMovies() {
-        APIManager.shared.fetchNowPlayingMovies(page: 1) { movies, error in
-            if let data = movies {
-                self.movies = data
+    
+    //MARK: 현재 상영중인 영화 fetch
+    private func fetchNowPlayingMovies() {
+        APIManager.shared.fetchUpcomingMovies(page: 1) { [weak self] movies, _ in
+            guard let self,
+                let movies else {
+                return
             }
+            
+            self.nowPlayingMovies = movies
+            searchView.tableView.reloadData()
         }
     }
     
@@ -77,7 +76,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return nowPlayingMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,7 +84,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.configureCell(dummyData[indexPath.row])
+        cell.configureCell(nowPlayingMovies[indexPath.row].title)
         return cell
     }
      
@@ -115,4 +114,9 @@ extension SearchViewController: UICollectionViewDataSource {
         return cell
     }
 
+}
+
+
+#Preview{
+    SearchViewController()
 }
