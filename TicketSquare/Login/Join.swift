@@ -100,7 +100,7 @@ class Join: UIViewController, UITextFieldDelegate {
     //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
         self.navigationController?.navigationBar.isHidden = false;
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         
         view.addSubview(joinLabel)
         joinLabel.snp.makeConstraints {

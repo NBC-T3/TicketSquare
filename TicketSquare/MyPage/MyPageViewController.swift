@@ -19,7 +19,7 @@ class MyPageViewController: UIViewController {
     
     private let ticketTableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = UIColorStyle.bg
         return tableView
     }()
     
@@ -34,9 +34,14 @@ class MyPageViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.isHidden = true
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         configureUI()
         configureTableView()
+    }
+    
+    private func configureData() {
+        let tickets = TicketManager().read()
+        self.tickets = tickets
     }
     
     private func configureUI() {

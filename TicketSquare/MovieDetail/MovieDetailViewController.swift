@@ -2,6 +2,7 @@
 
 
 
+
 import SnapKit
 import UIKit
 
@@ -9,6 +10,7 @@ class MovieDetailViewController: UIViewController {
     // 영화 데이터
     var movieDetails: MovieDetails?
     var posterImage: UIImage?
+    var onPushViewController: ((UIViewController) -> Void)?
     // MARK: - UI 요소 선언
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
@@ -52,7 +54,7 @@ class MovieDetailViewController: UIViewController {
         let button = UIButton()
         button.setTitle("예매하기", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = UIColorStyle.bg
         button.layer.cornerRadius = 8
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
@@ -83,7 +85,7 @@ class MovieDetailViewController: UIViewController {
     }
     // MARK: - UI 배치
     private func layoutUI() {
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         [posterImageView, horizontalStackView, overviewLabel, reserveButton]
             .forEach { view.addSubview($0) }
         [titleLabel, releaseDateLabel, runtimeLabel, genresLabel].forEach {
@@ -143,10 +145,10 @@ class MovieDetailViewController: UIViewController {
         if let details = movieDetails {
             titleLabel.text = details.title
             overviewLabel.text = details.overview
-            releaseDateLabel.text = "ReleaseDate: \(details.releaseDate)"
-            runtimeLabel.text = "Runtime: \(details.runtime) minutes"
+            releaseDateLabel.text = "개봉일: \(details.releaseDate)"
+            runtimeLabel.text = "상영시간: \(details.runtime) 분"
             genresLabel.text =
-                "Genres: \(details.genres.map { $0.name }.joined(separator: ", "))"
+            "장르: \(details.genres.map { $0.name }.joined(separator: ", "))"
             // 포스터 이미지 설정
             if let posterImage = posterImage {
                 posterImageView.image = posterImage
@@ -163,12 +165,14 @@ class MovieDetailViewController: UIViewController {
     }
     // MARK: - 예매 버튼 액션
     @objc private func reserveButtonTapped() {
-        let alert = UIAlertController(
-            title: "Reservation", message: "Reservation successful!",
-            preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-        //let reservationVC = ReservationViewController() // 예매 페이지로 이동
-        //navigationController?.pushViewController(reservationVC, animated: true)
+        dismiss(animated: true){ [weak self] in
+            guard let self,
+                  let movieDetails = self.movieDetails else { return }
+            
+            let ticketingViewController = TicketingViewController()
+            ticketingViewController.configure(movieDetails)
+            
+            self.onPushViewController?(ticketingViewController)
+        }
     }
 }

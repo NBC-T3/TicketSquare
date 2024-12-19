@@ -68,7 +68,7 @@ class Login: UIViewController, UITextFieldDelegate {
     private func configureUI() {
         self.navigationController?.navigationBar.isHidden = true;
 
-        view.backgroundColor = .black
+        view.backgroundColor = UIColorStyle.bg
         
         view.addSubview(loginLabel)
         loginLabel.snp.makeConstraints {
