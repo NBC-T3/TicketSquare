@@ -97,7 +97,7 @@ class MainViewController: UIViewController {
         let nextPage = (currentPage + 1) % totalItems  // 다음 페이지 계산
         let nextIndexPath = IndexPath(item: nextPage, section: 0)
         
-        collectionView.scrollToItem(at: nextIndexPath, at: .centeredHorizontally, animated: true)
+        collectionView.scrollToItem(at: nextIndexPath, at: .centeredVertically, animated: true)
         currentPage = nextPage  // 현재 페이지 업데이트
     }
     
@@ -298,7 +298,7 @@ class MainViewController: UIViewController {
 // 데이터 소스 설정
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
-
+    
     // 섹션 개수 변환
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return MovieSection.allCases.count  // 열거형의 정의된 모든 케이스의 개수를 섹션 개수로 사용
