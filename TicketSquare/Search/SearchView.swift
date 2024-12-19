@@ -111,23 +111,25 @@ class SearchView: UIView {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(30)
+            $0.top.equalTo(safeArea).offset(10)
             $0.leading.equalTo(safeArea).offset(20)
             $0.bottom.equalTo(tableView.snp.top).inset(50)
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(140)
+            $0.top.equalTo(safeArea).offset(120)
             $0.leading.equalTo(safeArea).inset(20)
             $0.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(safeArea).offset(-40)
+//            $0.bottom.equalTo(safeArea).offset(-40)
+            $0.bottom.equalTo(safeArea)
         }
         
         collectionView.snp.makeConstraints{
             $0.top.equalTo(safeArea).offset(140)
             $0.leading.equalTo(safeArea)
             $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(safeArea).offset(-40)
+//            $0.bottom.equalTo(safeArea).offset(-40)
+            $0.bottom.equalTo(safeArea)
         }
     }
     

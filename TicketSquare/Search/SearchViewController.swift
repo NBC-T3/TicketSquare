@@ -11,18 +11,31 @@ import SnapKit
 class SearchViewController: UIViewController {
     
     private var searchView = SearchView()
-    
     private var nowPlayingMovies: [Movie] = []//현재 상영중인 영화
     private var searchedMovies: [Movie] = []//검색된 영화
     private var searchKeyword: [SearchKeyword] = []//키워드로 검색한 결과
     private var movieDetails: [MovieDetails] = []//id로 검색한 결과
-    
     private var filteredItems: [String] = []//검색결과
 
     override func viewDidLoad() {
         view.backgroundColor = .black
         fetchNowPlayingMovies()
         setUpView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // 뷰 컨트롤러가 나타날 때 네비게이션 숨기기
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        super.viewWillAppear(animated)
+        viewReset()//뷰 시작시 초기화된 화면 표시
+    }
+    
+    //뷰 시작시 초기화된 화면 표시
+    private func viewReset() {
+        searchView.collectionView.isHidden = true
+        searchView.tableView.isHidden = false
+        searchView.titleLabel.text = "현재 상영중"
     }
     
     //MARK: 제약조건
@@ -58,14 +71,13 @@ class SearchViewController: UIViewController {
             searchMovies(searchText)
         }
         
-        //뷰 전환
-        changeView()
+        changeCollectionView()//컬렉션 뷰로 전환
         searchView.searchBar.searchTextField.text = nil
         
     }
     
     //컬렉션 뷰로 전환
-    private func changeView() {
+    private func changeCollectionView() {
         searchView.collectionView.isHidden = false
         searchView.tableView.isHidden = true
         searchView.titleLabel.text = "검색 결과"
