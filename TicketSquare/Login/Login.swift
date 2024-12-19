@@ -19,7 +19,6 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.textColor = .white
     }
     private let id: UITextField = UITextField().then {
-        $0.becomeFirstResponder()
         $0.placeholder = "아이디"
         $0.font = UIFont.systemFont(ofSize: 25)
         $0.backgroundColor = .gray
@@ -29,8 +28,6 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.keyboardType = .emailAddress
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
-        
-//        $0.text = UserDefaults.standard.string(forKey: "ID")
     }
     private let password: UITextField = UITextField().then {
         $0.placeholder = "비밀번호"
@@ -42,15 +39,12 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .done
-        
-//        $0.text = UserDefaults.standard.string(forKey: "Password")
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
         $0.backgroundColor = .darkGray
         $0.setTitleColor(.gray, for: .normal)
         $0.layer.cornerRadius = 4
-        //$0.isEnabled = false // 아이디와 비밀번호가 입력되었을때만 활성화됨
         $0.addTarget(self, action: #selector(loginBtnTapped), for: .touchDown)
     }
     private let joinBtn: UIButton = UIButton().then {
@@ -64,6 +58,7 @@ class Login: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         configureUI()
+        
         id.delegate = self
         password.delegate = self
     }
@@ -105,7 +100,6 @@ class Login: UIViewController, UITextFieldDelegate {
         }
     }
     
-
     //회원가입 버튼이 눌렸을 때
     @objc
     private func joinBtnTapped() {
@@ -115,18 +109,29 @@ class Login: UIViewController, UITextFieldDelegate {
     //로그인 버튼이 눌렸을 때
     @objc
     private func loginBtnTapped() {
-        self.navigationController?.pushViewController(MainViewController(), animated: true)
-//        UserDefaults.standard.set(id.text, forKey: "ID")
-//        UserDefaults.standard.set(password.text, forKey: "Password")
+        //UserDefaults에 저장되어있는 아이디와 비밀번호
+        let checkID = UserDefaults.standard.string(forKey: "ID")
+        let checkPW = UserDefaults.standard.string(forKey: "PW")
+        
+        //사용자가 입력한 아이디와 비밀번호
+        let userInputID = id.text
+        let userInputPW = password.text
+        
+        //UserDefaults와 사용자가 입력한 값을 비교하여 판단
+        if checkID == userInputID && checkPW == userInputPW {
+            self.navigationController?.pushViewController(MainTabBarController(), animated: true)
+        } else {
+            let alert = UIAlertController(title: "로그인 실패", message: "아이디, 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "확인", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true)
+        }
+        //self.navigationController?.pushViewController(MainViewController(), animated: true)
+        //UserDefaults.standard.value(forKey: "ID") as string
     }
-    
-    @objc
-    private func textFieldDidChange(_ textField: UITextField) {
-        let isUsernameValid = !(id.text?.isEmpty ?? true)
-        let isPasswordValid = !(password.text?.isEmpty ?? true)
-        loginBtn.isEnabled = isUsernameValid && isPasswordValid
-    }
-    
+        
+    //MARK: 키보드 설정
+    //다른 공간 터치시 키보드 사라짐
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
@@ -134,12 +139,12 @@ class Login: UIViewController, UITextFieldDelegate {
     
     //다음 TextField로 포커스 이동
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if textField == id {
-                password.becomeFirstResponder() // 다음 필드로 포커스 이동
-            } else if textField == password {
-                textField.resignFirstResponder() // 키보드 숨기기
-            }
-            return true
+        if textField == id {
+            password.becomeFirstResponder() // 다음 필드로 포커스 이동
+        } else if textField == password {
+            textField.resignFirstResponder() // 키보드 숨기기
         }
+        return true
+    }
 }
 

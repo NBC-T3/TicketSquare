@@ -9,10 +9,9 @@ import UIKit
 import SnapKit
 import Then
 
-class Join: UIViewController {
+class Join: UIViewController, UITextFieldDelegate {
     
     //MARK: 각 요소들의 속성 부분
-    //UserDefaults 부분 추후 확인을 위해 일단 주석처리 함. 추후 삭제예정
     private let joinLabel: UILabel = UILabel().then {
         $0.text = "티켓스퀘어 회원가입"
         $0.textAlignment = .center
@@ -29,9 +28,6 @@ class Join: UIViewController {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
-        
-        $0.becomeFirstResponder() //화면에서 가장 처음으로 포커스 주는 부분
-        //$0.text = UserDefaults.standard.string(forKey: "Name")
     }
     private let birth: UITextField = UITextField().then {
         $0.placeholder = " 생년월일을 입력해주세요."
@@ -43,8 +39,6 @@ class Join: UIViewController {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
-        
-        //$0.text = UserDefaults.standard.string(forKey: "Birth")
     }
     private let phoneNumber: UITextField = UITextField().then {
         $0.placeholder = " 전화번호를 입력해주세요."
@@ -56,8 +50,6 @@ class Join: UIViewController {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
-        
-        //$0.text = UserDefaults.standard.string(forKey: "PhoneNumber")
     }
     private let id: UITextField = UITextField().then {
         $0.placeholder = " 아이디를 입력해주세요."
@@ -69,8 +61,6 @@ class Join: UIViewController {
         $0.keyboardType = .emailAddress
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .next
-        
-        //$0.text = UserDefaults.standard.string(forKey: "ID")
     }
     private let password: UITextField = UITextField().then {
         $0.placeholder = " 비밀번호를 입력해주세요."
@@ -98,11 +88,19 @@ class Join: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        
+        name.delegate = self
+        birth.delegate = self
+        phoneNumber.delegate = self
+        id.delegate = self
+        password.delegate = self
     }
     
     
     //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {
+        self.navigationController?.navigationBar.isHidden = false;
+        view.backgroundColor = .black
         
         view.addSubview(joinLabel)
         joinLabel.snp.makeConstraints {
@@ -159,12 +157,35 @@ class Join: UIViewController {
         
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            self?.navigationController?.pushViewController(Login(), animated: true)
+            self?.navigationController?.popViewController(animated: true)
 //            MainViewController().modalPresentationStyle = .fullScreen
 //            self?.present(MainViewController(), animated: true, completion: nil)
         }
         alert.addAction(action)
         present(alert, animated: true)
+    }
+    
+    //MARK: 키보드 설정
+    //다른 공간 터치시 키보드 사라짐
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        super.touchesBegan(touches, with: event)
+    }
+    
+    //다음 TextField로 포커스 이동
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == name {
+            birth.becomeFirstResponder() // 다음 필드로 포커스 이동
+        } else if textField == birth {
+            phoneNumber.becomeFirstResponder()
+        } else if textField == phoneNumber {
+            id.becomeFirstResponder()
+        } else if textField == id {
+            password.becomeFirstResponder()
+        } else if textField == password {
+            textField.resignFirstResponder() // 키보드 숨기기
+        }
+        return true
     }
     
 }
