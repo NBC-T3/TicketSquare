@@ -21,6 +21,8 @@ class SearchView: UIView {
         searchBar.searchTextField.font = .systemFont(ofSize: 18)
         searchBar.backgroundColor = .gray
         searchBar.layer.cornerRadius = 10
+        searchBar.backgroundColor = .lightGray
+        searchBar.searchTextField.backgroundColor = .lightGray
         
         return searchBar
     }()
@@ -89,20 +91,20 @@ class SearchView: UIView {
         
         searchBar.snp.makeConstraints {
             $0.top.equalTo(safeArea.snp.top)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(50)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(10)
-            $0.leading.equalTo(safeArea).offset(20)
-            $0.bottom.equalTo(tableView.snp.top).inset(50)
+            $0.top.equalTo(searchBar.snp.bottom).offset(30)
+            $0.leading.equalTo(safeArea).offset(30)
+            $0.height.equalTo(50)
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(120)
-            $0.leading.equalTo(safeArea).inset(20)
-            $0.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(safeArea).inset(40)
+            $0.trailing.equalToSuperview().inset(30)
             $0.bottom.equalTo(safeArea)
         }
         
