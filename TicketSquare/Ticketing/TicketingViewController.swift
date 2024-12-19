@@ -200,10 +200,26 @@ final class TicketingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+
         configureUI()
         configureCollectionView()
         setUpTimeDatas()
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.backgroundColor = .clear
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+
     }
     
     // 푸터 업데이트
@@ -242,6 +258,7 @@ extension TicketingViewController {
         
         view.backgroundColor = .black
         
+        
         [
             headerLabel,
             inputScrollView,
@@ -270,13 +287,13 @@ extension TicketingViewController {
         ].forEach { priceStackView.addArrangedSubview($0) }
         
         headerLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview().inset(0)
             $0.height.equalTo(80)
         }
         
         footerView.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalToSuperview().inset(20)
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(100)
         }
