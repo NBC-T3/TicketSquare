@@ -148,16 +148,20 @@ class Join: UIViewController, UITextFieldDelegate {
     //회원가입 완료 후 메인페이지로 이동하는 Alert
     @objc
     private func joinBtnTapped() {
+        //MARK: 회원가입 정보 저장
         UserDefaults.standard.set(id.text, forKey: "ID")
         UserDefaults.standard.set(password.text, forKey: "PW")
         UserDefaults.standard.set(name.text, forKey: "Name")
         UserDefaults.standard.set(phoneNumber.text, forKey: "PhoneNumber")
         UserDefaults.standard.set(birth.text, forKey: "Birth")
         
-        if id.text?.isEmpty == false && password.text?.isEmpty == false && name.text?.isEmpty == false && phoneNumber.text?.isEmpty == false && birth.text?.isEmpty == false {
-            
+        //TextField가 전부 채워졌는지 검증
+        if id.text?.isEmpty == false,
+           password.text?.isEmpty == false,
+           name.text?.isEmpty == false,
+           phoneNumber.text?.isEmpty == false,
+           birth.text?.isEmpty == false {
             welcomAlert()
-            
         } else {
             errorAlert()
         }
