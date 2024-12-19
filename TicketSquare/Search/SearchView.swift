@@ -21,16 +21,8 @@ class SearchView: UIView {
         searchBar.searchTextField.font = .systemFont(ofSize: 18)
         searchBar.backgroundColor = .gray
         searchBar.layer.cornerRadius = 10
+        
         return searchBar
-    }()
-    
-    let searchButton: UIButton = {
-        var button = UIButton()
-        button.setTitle("검색", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 10
-        return button
     }()
     
     //MARK: 메인화면
@@ -91,22 +83,13 @@ class SearchView: UIView {
         backgroundColor = .black
         
         addSubview(searchBar)
-        addSubview(searchButton)
         addSubview(titleLabel)
         addSubview(tableView)
         addSubview(collectionView)
         
         searchBar.snp.makeConstraints {
             $0.top.equalTo(safeArea.snp.top)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalTo(searchButton.snp.leading).inset(-10)
-            $0.height.equalTo(50)
-        }
-        
-        searchButton.snp.makeConstraints {
-            $0.centerY.equalTo(searchBar)
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(80)
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(50)
         }
         
@@ -120,7 +103,6 @@ class SearchView: UIView {
             $0.top.equalTo(safeArea).offset(120)
             $0.leading.equalTo(safeArea).inset(20)
             $0.trailing.equalToSuperview().inset(20)
-//            $0.bottom.equalTo(safeArea).offset(-40)
             $0.bottom.equalTo(safeArea)
         }
         
@@ -128,7 +110,6 @@ class SearchView: UIView {
             $0.top.equalTo(safeArea).offset(140)
             $0.leading.equalTo(safeArea)
             $0.trailing.equalToSuperview()
-//            $0.bottom.equalTo(safeArea).offset(-40)
             $0.bottom.equalTo(safeArea)
         }
     }

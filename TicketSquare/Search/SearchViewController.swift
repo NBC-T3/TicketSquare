@@ -10,17 +10,21 @@ import SnapKit
 
 class SearchViewController: UIViewController {
     
+    //MARK: 프로퍼티 선언
     private var searchView = SearchView()
     private var nowPlayingMovies: [Movie] = []//현재 상영중인 영화
     private var searchedMovies: [Movie] = []//검색된 영화
     private var searchKeyword: [SearchKeyword] = []//키워드로 검색한 결과
     private var movieDetails: [MovieDetails] = []//id로 검색한 결과
     private var filteredItems: [String] = []//검색결과
-
+    
     override func viewDidLoad() {
         view.backgroundColor = .black
         fetchNowPlayingMovies()
         setUpView()
+        
+        //검색창 Delegate 설정
+        searchView.searchBar.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,28 +57,12 @@ class SearchViewController: UIViewController {
         //컬렉션뷰
         searchView.collectionView.dataSource = self// 데이터 소스 설정
         searchView.collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.identifier)
-        
-        //서치바
-        searchView.searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-        
+
         searchView.snp.makeConstraints{
             $0.top.leading.trailing.bottom.equalToSuperview()
         }
     }
     
-    //MARK: 검색버튼 이벤트
-    @objc private func searchButtonTapped() {
-        movieDetails.removeAll()
-        
-        let text = searchView.searchBar.searchTextField.text
-        if let searchText = text {
-            searchMovies(searchText)
-        }
-        
-        changeCollectionView()//컬렉션 뷰로 전환
-        searchView.searchBar.searchTextField.text = nil
-        
-    }
     
     //컬렉션 뷰로 전환
     private func changeCollectionView() {
@@ -87,7 +75,7 @@ class SearchViewController: UIViewController {
     private func fetchNowPlayingMovies() {
         APIManager.shared.fetchUpcomingMovies(page: 1) { [weak self] movies, _ in
             guard let self,
-                let movies else {
+                  let movies else {
                 return
             }
             
@@ -99,46 +87,71 @@ class SearchViewController: UIViewController {
     //MARK: 키워드로 영화 검색 fetch
     private func searchMovies(_ searchKeyword: String) {
         let group = DispatchGroup()
+        self.searchKeyword = []
         
-        //이미지
+        var empty = [SearchKeyword]()
+
         group.enter()
         APIManager.shared.searchForKeyWordMovies(page: 1, keyWord: searchKeyword) { result, _ in
             if let data = result {
-                //self.searchKeyword = data
-                for searchMovie in data {
-                    APIManager.shared.fetchMovieDetails(movieID: searchMovie.id) { result,_ in
-                        if let data = result {
-                            self.movieDetails.append(data)
-                        }
-                    }
-                }
+                empty = data
             }
             group.leave()
         }
         
         // 모든 데이터를 가져오면 컬렉션 뷰를 새로고침
         group.notify(queue: .main) {
+            self.searchKeyword = empty
+            self.fetchMoviesDetails()
+        }
+    }
+    
+    private func fetchMoviesDetails() {
+        let group = DispatchGroup()
+
+        self.movieDetails = []
+        
+        var tempMovieDetails = [MovieDetails]()
+        
+        for movieId in searchKeyword {
+            group.enter()
+            
+            APIManager.shared.fetchMovieDetails(movieID: movieId.id) { result,_ in
+                if let data = result, let posterPath = data.posterPath {
+                    tempMovieDetails.append(data)
+                }
+                group.leave()
+            }
+        }
+        
+        
+        // 모든 데이터를 가져오면 컬렉션 뷰를 새로고침
+        group.notify(queue: .main) {
+            
+            self.movieDetails = tempMovieDetails
+            
             self.reloadCollectionView()
         }
     }
-
-
-    //테이블뷰 reload
+    
+    
+    //MARK: 뷰 reload
     func reloadTableView() {
         searchView.tableView.reloadData()
     }
     
-    //컬렉션뷰 reload
     func reloadCollectionView() {
         searchView.collectionView.reloadData()
     }
     
-    //TODO: 키보드 메소드
-    
+    //MARK: 화면을 터치할 경우 키보드 내리기
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     
 }
 
-//테이블 뷰 셀 관련 코드
+//MARK: 테이블 뷰 설정
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -149,11 +162,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? SearchTableViewCell else {
             return UITableViewCell()
         }
-
+        
         cell.configureCell(nowPlayingMovies[indexPath.row].title)
         return cell
     }
-     
+    
 }
 
 
@@ -174,28 +187,41 @@ extension SearchViewController: UICollectionViewDataSource {
         
         return cell
     }
-
+    
 }
+
 
 //MARK: 검색바 설정
 extension SearchViewController: UISearchBarDelegate {
     
     // 유저가 텍스트 입력했을 때
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    }
+    
+    // 엔터 키를 눌렀을 때 동작
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            return
+        }
+        
+        let trimEmptySpace = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        searchMovies(trimEmptySpace)
+        
+        changeCollectionView()//컬렉션 뷰로 전환
+        searchView.searchBar.searchTextField.text = nil
+        
         reloadCollectionView()
+        
+        // 키보드 내리기
+        searchBar.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // 취소 버튼을 누를 때 검색어를 초기화하고 테이블 뷰를 갱신합니다.
-        searchBar.text = nil
-        searchBar.resignFirstResponder() // 키보드 내림
+        searchBar.text = ""
         reloadCollectionView()
+        searchBar.resignFirstResponder() // 키보드 내림
     }
-    
-    
-}
-
-
-#Preview{
-    SearchViewController()
 }

@@ -43,6 +43,11 @@ class SearchCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    //셀 재사용 전 이미지 초기화
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = UIImage()
+    }
     
     //MARK: 초기화
     override init(frame: CGRect) {
