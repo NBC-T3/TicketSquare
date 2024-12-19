@@ -22,6 +22,12 @@ class MovieDetailViewController: UIViewController {
         return label
     }()
     
+    private let overviewScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
     private let overviewLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -81,7 +87,6 @@ class MovieDetailViewController: UIViewController {
     }()
     
     private var isOverviewExpanded = false
-    private var reserveButtonBottomConstraint: Constraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,11 +100,12 @@ class MovieDetailViewController: UIViewController {
     private func layoutUI() {
         view.backgroundColor = .black
         
-        [posterImageView, horizontalStackView, overviewLabel, reserveButton].forEach { view.addSubview($0) }
+        [posterImageView, horizontalStackView, overviewScrollView, reserveButton].forEach { view.addSubview($0) }
         
         [titleLabel, releaseDateLabel, runtimeLabel, genresLabel].forEach { verticalStackView.addArrangedSubview($0) }
         
         horizontalStackView.addArrangedSubview(verticalStackView)
+        overviewScrollView.addSubview(overviewLabel)
         
         posterImageView.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top)
@@ -112,13 +118,19 @@ class MovieDetailViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
-        overviewLabel.snp.makeConstraints { make in
+        overviewScrollView.snp.makeConstraints { make in
             make.top.equalTo(horizontalStackView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(80)
+        }
+        
+        overviewLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
         }
         
         reserveButton.snp.makeConstraints { make in
-            make.top.equalTo(overviewLabel.snp.bottom).offset(20)
+            make.top.equalTo(overviewScrollView.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
             make.height.equalTo(50)
             make.width.equalTo(300)
@@ -143,11 +155,20 @@ class MovieDetailViewController: UIViewController {
     @objc private func toggleOverviewExpansion() {
         isOverviewExpanded.toggle()
         
-        overviewLabel.numberOfLines = isOverviewExpanded ? 0 : 3
-        
-        UIView.animate(withDuration: 0.3) {
-            // 숨겨진 예매 버튼의 위치를 레이아웃 조정에 따라 업데이트
-            self.reserveButtonBottomConstraint?.update(offset: self.isOverviewExpanded ? -40 : -20)
+        // 개요가 확장되면 스크롤 가능 영역을 늘려준다
+        UIView.animate(withDuration: 0.0) {
+            if self.isOverviewExpanded {
+                self.overviewLabel.numberOfLines = 0
+                self.overviewScrollView.snp.updateConstraints { make in
+                    make.height.equalTo(200) // 확장된 개요에 맞춰서 스크롤 영역을 늘림
+                }
+            } else {
+                self.overviewScrollView.snp.updateConstraints { make in
+                    make.height.equalTo(80)
+                }
+            }
+            
+            // 레이아웃을 즉시 갱신
             self.view.layoutIfNeeded()
         }
     }
@@ -192,7 +213,7 @@ class MovieDetailViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self.titleLabel.text = details.title
-                self.overviewLabel.text = details.overview
+                self.overviewLabel.text = details.overview + details.overview + details.overview + details.overview
                 self.releaseDateLabel.text = "ReleaseDate: \(details.releaseDate)"
                 self.runtimeLabel.text = "Runtime: \(details.runtime) minutes"
                 self.genresLabel.text = "Genres: \(details.genres.map { $0.name }.joined(separator: ", "))"
