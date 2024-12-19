@@ -11,6 +11,7 @@ import SnapKit
 class MyPageViewController: UIViewController {
     
     private var tickets: [Ticket] = []
+    
     private let editButton: UIButton = {
         let button = makeButton("개인정보 변경")
         
