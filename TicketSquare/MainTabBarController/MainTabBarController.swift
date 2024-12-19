@@ -4,6 +4,7 @@ import SnapKit
 class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         // 탭 바 스타일 설정
@@ -28,6 +29,16 @@ class MainTabBarController: UITabBarController {
         navController.tabBarItem.image = UIImage(systemName: imageName,
                                                  withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 20)))?.withBaselineOffset(fromBottom: UIFont.systemFontSize)
         return navController
+    }
+    
+    // 탭 전환 시 애니메이션 제거
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        guard let index = tabBar.items?.firstIndex(of: item),
+              let viewControllers = viewControllers else { return }
+
+        UIView.performWithoutAnimation {
+            selectedViewController = viewControllers[index]
+        }
     }
 }
 
