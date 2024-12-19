@@ -72,8 +72,6 @@ class Join: UIViewController, UITextFieldDelegate {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .done
-        
-        //$0.text = UserDefaults.standard.string(forKey: "PW")
     }
     private let joinBtn: UIButton = UIButton().then {
         $0.backgroundColor = .systemBlue
@@ -146,20 +144,21 @@ class Join: UIViewController, UITextFieldDelegate {
         
     }
     
+    //MARK: Button Action
     //회원가입 완료 후 메인페이지로 이동하는 Alert
     @objc
     private func joinBtnTapped() {
+        //MARK: UserDefaults로 회원가입 정보 저장
         UserDefaults.standard.set(id.text, forKey: "ID")
         UserDefaults.standard.set(password.text, forKey: "PW")
         UserDefaults.standard.set(name.text, forKey: "Name")
         UserDefaults.standard.set(phoneNumber.text, forKey: "PhoneNumber")
         UserDefaults.standard.set(birth.text, forKey: "Birth")
         
+        
         let alert = UIAlertController(title: "Welcome!", message: "회원가입이 완료되었습니다!", preferredStyle: .alert)
         let action = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             self?.navigationController?.popViewController(animated: true)
-//            MainViewController().modalPresentationStyle = .fullScreen
-//            self?.present(MainViewController(), animated: true, completion: nil)
         }
         alert.addAction(action)
         present(alert, animated: true)

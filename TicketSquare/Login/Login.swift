@@ -100,6 +100,7 @@ class Login: UIViewController, UITextFieldDelegate {
         }
     }
     
+    //MARK: Button Actions
     //회원가입 버튼이 눌렸을 때
     @objc
     private func joinBtnTapped() {
@@ -126,8 +127,6 @@ class Login: UIViewController, UITextFieldDelegate {
             alert.addAction(action)
             present(alert, animated: true)
         }
-        //self.navigationController?.pushViewController(MainViewController(), animated: true)
-        //UserDefaults.standard.value(forKey: "ID") as string
     }
         
     //MARK: 키보드 설정
