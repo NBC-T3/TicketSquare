@@ -10,12 +10,12 @@ import Foundation
 struct MockData {
     
     static let timeDatas: [Ticket.TicketingDate: Set<Ticket.TicketcingTime>] = {
-       var timeDatas = [Ticket.TicketingDate: Set<Ticket.TicketcingTime>]()
-
+        var timeDatas = [Ticket.TicketingDate: Set<Ticket.TicketcingTime>]()
+        
         let countRange = 7...15
         let hourRange = 8...23
         let minuteRange = 0...59
-
+        
         let date = Calendar.current.component(.day, from: Date())
         
         (0...6).forEach {
@@ -38,12 +38,22 @@ struct MockData {
     }()
     
     static let tickets: [Ticket] = {
-            var numberOfPeople = Ticket.NumberOfPeople()
-            numberOfPeople.addAdult()
-            numberOfPeople.addMinor()
-            
-            let ticket = Ticket(ticketingDate: .init(from: Date()), ticketcingTime: Ticket.TicketcingTime(hour: 11, minute: 30), numberOfPeople: numberOfPeople)
-            
-            return [ticket, ticket, ticket]
-        }()
+        var numberOfPeople = Ticket.NumberOfPeople()
+        numberOfPeople.addAdult()
+        numberOfPeople.addMinor()
+        
+        let movieDetail = MovieDetails(title: "제목",
+                                       overview: "어쩌구",
+                                       releaseDate: "312312412451",
+                                       posterPath: "",
+                                       runtime: 123,
+                                       genres: [])
+        
+        let ticket = Ticket(movieDetails: movieDetail,
+                            ticketingDate: .init(from: Date()),
+                            ticketcingTime: Ticket.TicketcingTime(hour: 11, minute: 30),
+                            numberOfPeople: numberOfPeople)
+        
+        return [ticket, ticket, ticket]
+    }()
 }

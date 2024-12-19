@@ -26,7 +26,7 @@ struct MovieResponse: Decodable {
 }
 
 // fetchMovieDetails 메서드에서 사용되는 모델
-struct MovieDetails: Decodable {
+struct MovieDetails: Codable {
     let title: String
     let overview: String
     let releaseDate: String
@@ -50,7 +50,7 @@ struct MovieDetails: Decodable {
     }
 }
 
-struct Genres: Decodable {
+struct Genres: Codable {
     let id: Int
     let name: String
 }

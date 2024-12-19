@@ -40,7 +40,7 @@ class SearchView: UIView {
     
     let tableView: UITableView = {
         var tableView = UITableView()
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = UIColorStyle.bg
         tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
@@ -63,7 +63,7 @@ class SearchView: UIView {
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0) //셀 여백
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = UIColorStyle.bg
         
         return collectionView
     }()
@@ -84,7 +84,7 @@ class SearchView: UIView {
     func setUpView() {
         let safeArea = safeAreaLayoutGuide
         
-        backgroundColor = .black
+        backgroundColor = UIColorStyle.bg
         
         addSubview(searchBar)
         addSubview(searchButton)
