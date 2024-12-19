@@ -1,10 +1,3 @@
-//
-//  PagingImageCell.swift
-//  TicketSquare
-//
-//  Created by 강민성 on 12/16/24.
-//
-
 import UIKit
 import SnapKit
 
@@ -12,6 +5,12 @@ class PagingImageCell: UICollectionViewCell {
     
     // 셀 재사용 식별자 id
     static let identifier = "PagingImageCell"
+    
+    // 버튼 클릭 시 실행될 클로저
+    var buttonAction: ((MovieDetails, UIImage) -> Void)?
+    
+    private var movieDetails: MovieDetails? = nil
+    private var posterImage: UIImage? = nil
     
     // 이미지 뷰 설정
     private let imageView: UIImageView = {
@@ -29,9 +28,6 @@ class PagingImageCell: UICollectionViewCell {
         button.backgroundColor = .clear
         return button
     }()
-    
-    var buttonAction: (() -> Void)?
-    
     
     // 셀 초기화 메서드
     override init(frame: CGRect) {
@@ -59,20 +55,34 @@ class PagingImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // 외부에서 호출해 이미지를 설정하는 메서드
-    func configure(with urlString: String) {
-        getImage(from: urlString)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.movieDetails = nil
+        self.imageView.image = nil
+    }
+    
+    // 외부에서 호출해 데이터를 설정하는 메서드
+    func configure(with movie: Movie) {
+        let imageURL = APIManager.shared.getImageURL(for: movie.posterPath)
+        
+        // 이미지 설정
+        getImage(from: imageURL)
+        
+        // MovieDetails 설정
+        APIManager.shared.fetchMovieDetails(movieID: movie.id) { [weak self] movieDetails, error in
+            guard let self,
+                  let movieDetails,
+                  error == nil else { return }
+            self.movieDetails = movieDetails
+        }
     }
     
     // URL로부터 이미지를 비동기적으로 가져오는 메서드
     private func getImage(from urlString: String) {
-        // 문자열 URL을 URL 객체로 변환
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         
-        // URLSession을 사용해 비동기적으로 데이터를 요청
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-
             guard let self,
                   let data,
                   let response = response as? HTTPURLResponse,
@@ -92,12 +102,14 @@ class PagingImageCell: UICollectionViewCell {
             }
 
             DispatchQueue.main.async {
+                self.posterImage = image
                 self.imageView.image = image
             }
         }.resume()
     }
     
     @objc private func buttonTapped() {
-        buttonAction?() // 버튼이 눌리면 외부로 이벤트 전달
-    }
+        guard let movieDetails = movieDetails, let posterImage = posterImage else { return }
+        buttonAction?(movieDetails, posterImage)
+      }
 }
