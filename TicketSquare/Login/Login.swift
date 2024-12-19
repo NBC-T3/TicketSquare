@@ -39,6 +39,7 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .done
+        $0.isSecureTextEntry = true
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
