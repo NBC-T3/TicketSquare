@@ -21,7 +21,7 @@ struct Ticket: Codable, Equatable {
     
     func nsData() -> NSData? {
         guard let data = try? JSONEncoder().encode(self) else { return nil }
-     
+        
         return data as NSData
     }
     
@@ -79,6 +79,13 @@ struct Ticket: Codable, Equatable {
         }
     }
     
+    func scheduleDescribing() -> String? {
+        guard let schedule = self.schedule() else { return "" }
+        let date = String(describing: self.ticketingDate)
+        
+        return date + " \(schedule.startTime) - \(schedule.endTime)"
+    }
+    
     func schedule() -> (startTime: String, endTime: String)? {
         guard let runtime = movieDetails?.runtime,
         let startTime = ticketcingTime?.cellForm(),
@@ -97,7 +104,11 @@ struct Ticket: Codable, Equatable {
 
 extension Ticket {
     // 예매 일자 구조체
-    struct TicketingDate: Codable, Hashable {
+    struct TicketingDate: Codable, Hashable, CustomStringConvertible {
+        var description: String {
+            "\(year)년 \(month)월 \(day)일"
+        }
+        
         private let year: Int
         private let month: Int
         private let day: Int
@@ -113,6 +124,8 @@ extension Ticket {
             self.month = Calendar.current.component(.month, from: date)
             self.day = Calendar.current.component(.day, from: date)
         }
+        
+        
     }
 
         
@@ -168,7 +181,17 @@ extension Ticket {
 
 extension Ticket {
     // 인원 수 구조체
-    struct NumberOfPeople: Codable {
+    struct NumberOfPeople: Codable, CustomStringConvertible {
+        
+        var description: String {
+            let adult: String? = adult != 0 ? "일반 \(adult)명" : nil
+            let minor: String? = minor != 0 ? "청소년 \(minor)명" : nil
+            let peopleString = [adult, minor]
+                .compactMap { $0 }
+                .joined(separator: ", ")
+            
+            return peopleString
+        }
         
         var totalPrice: Int {
             adult * 15000 + minor * 12000

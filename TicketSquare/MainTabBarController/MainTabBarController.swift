@@ -13,6 +13,8 @@ class MainTabBarController: UITabBarController {
         tabBar.backgroundColor = UIColorStyle.bg // 탭 바의 배경색을 검은색으로 설정
         tabBar.isTranslucent = false  // 탭 바의 투명도 비활성화
         view.backgroundColor = UIColorStyle.bg
+        tabBar.scrollEdgeAppearance?.backgroundColor = UIColorStyle.bg
+        tabBar.standardAppearance.backgroundColor = UIColorStyle.bg
         
         // 탭 추가 ( ViewController 들 연결 )
         let homeVC = createNavController(vc: MainViewController(), title: "홈", imageName: "house.fill")
