@@ -4,16 +4,14 @@
 
 ## 🙆‍♂️ 팀원
 
-|<a href="https://github.com/0-jerry"><img src="https://private-avatars.githubusercontent.com/u/120617542?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU3MDAsIm5iZiI6MTczNDY2NDUwMCwicGF0aCI6Ii91LzEyMDYxNzU0MiJ9.UcnE8_EsJB4Spn-8LNeXW_Ps7K3jj7EwUVosBAQGqEU&v=4" width=150></a>|<a href="https://github.com/kangminseoung"><img src="https://private-avatars.githubusercontent.com/u/185740758?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU3MDAsIm5iZiI6MTczNDY2NDUwMCwicGF0aCI6Ii91LzE4NTc0MDc1OCJ9.yPOymdi5S8hJ1Ig1JaXt0MVTqgEgJxbD8MQnBSrPdd4&v=4" width=150></a>|<a href="https://github.com/AhnJunGyung"><img src="https://private-avatars.githubusercontent.com/u/84224280?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY1NDAsIm5iZiI6MTczNDY2NTM0MCwicGF0aCI6Ii91Lzg0MjI0MjgwIn0.MMaXGzpVA81QndgoQ-UV1GY_14uAXXF95MKYG6m7Hlc&v=4" width=150></a>|<a href="https://github.com/Quaker-Lee"><img src="https://private-avatars.githubusercontent.com/u/106296018?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY2MDAsIm5iZiI6MTczNDY2NTQwMCwicGF0aCI6Ii91LzEwNjI5NjAxOCJ9._9IbUBJuKNROBs9FBajLWPnXkszd6vhm21OCOQF60LE&v=4" width=150></a>|<a href="https://github.com/HwangSeokBeom"><img src="https://private-avatars.githubusercontent.com/u/49748207?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY0MjAsIm5iZiI6MTczNDY2NTIyMCwicGF0aCI6Ii91LzQ5NzQ4MjA3In0._4Wt-Cjc6yrbJHGvUUBzyflNTPohq-cI3CJ55ibadeU&v=4" width=150></a>|
+|[이재영](https://github.com/0-jerry) (팀장)|[강민성](https://github.com/kangminseoung)|[안준경](https://github.com/AhnJunGyung)|[이재건](https://github.com/Quaker-Lee)|[황석범](https://github.com/HwangSeokBeom)|
 |:---:|:---:|:---:|:---:|:---:|
-|<a href="https://github.com/0-jerry">이재영</a>(팀장)|<a href="https://github.com/kangminseoung">강민성</a>|<a href="https://github.com/AhnJunGyung">안준경</a>|<a href="https://github.com/Quaker-Lee">이재건</a>|<a href="https://github.com/HwangSeokBeom">황석범</a>|
 |예매 페이지<br/>마이 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바, 세부 페이지|
-<br/>
 
+<br/>
 <br/>
 
 ## 🎥 시연 영상
-39
 |<img src="https://github.com/user-attachments/assets/ba66960e-588b-4a16-9081-778a7a3833c3" width="66%">|<img src="https://github.com/user-attachments/assets/c88ca288-76fb-42e5-8203-1ddcb81994fd" width="66%">|<img src="https://github.com/user-attachments/assets/b6e38e12-2eb9-4ed4-afda-ccaa1f726b73" width="66%">|
 |:---:|:---:|:---:|
 |로그인 & 마이페이지|메인 & 예매|검색|
