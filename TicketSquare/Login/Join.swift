@@ -94,6 +94,11 @@ class Join: UIViewController, UITextFieldDelegate {
         password.delegate = self
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.navigationController?.navigationBar.isHidden = false 
+    }
+    
     
     //MARK: 각 요소들의 UI 구현 부분
     private func configureUI() {

@@ -123,6 +123,7 @@ class Login: UIViewController, UITextFieldDelegate {
         //UserDefaults와 사용자가 입력한 값을 비교하여 판단
         if checkID == userInputID && checkPW == userInputPW {
             self.navigationController?.pushViewController(MainTabBarController(), animated: true)
+            self.navigationController?.navigationBar.isHidden = true
         } else {
             let alert = UIAlertController(title: "로그인 실패", message: "아이디, 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
             let action = UIAlertAction(title: "확인", style: .default)
