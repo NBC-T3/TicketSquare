@@ -67,10 +67,13 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
         setupViews()  // 뷰 구성하는 메서드 호출
         fetchMovies()  // 영화 데이터를 가져오는 메서드 호출
         startAutoScroll()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func startAutoScroll() {
@@ -97,7 +100,7 @@ class MainViewController: UIViewController {
         let nextPage = (currentPage + 1) % totalItems  // 다음 페이지 계산
         let nextIndexPath = IndexPath(item: nextPage, section: 0)
         
-        collectionView.scrollToItem(at: nextIndexPath, at: .centeredHorizontally, animated: true)
+        collectionView.scrollToItem(at: nextIndexPath, at: .centeredVertically, animated: true)
         currentPage = nextPage  // 현재 페이지 업데이트
     }
     
@@ -225,7 +228,7 @@ class MainViewController: UIViewController {
         
         // 섹션 여백 설정
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0, leading: 10, bottom: 0, trailing: 10)
+            top: 20, leading: 10, bottom: 20, trailing: 10)
         
         // 아이템 사이의 간격 설정
         section.interGroupSpacing = 15  // 그룹 사이 간격 설정
@@ -298,7 +301,7 @@ class MainViewController: UIViewController {
 // 데이터 소스 설정
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
-
+    
     // 섹션 개수 변환
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return MovieSection.allCases.count  // 열거형의 정의된 모든 케이스의 개수를 섹션 개수로 사용
