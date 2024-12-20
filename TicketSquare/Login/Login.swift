@@ -40,6 +40,7 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .done
         $0.isSecureTextEntry = true
+        $0.textContentType = .password
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
