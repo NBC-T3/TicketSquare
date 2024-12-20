@@ -13,7 +13,7 @@ class SearchTableViewCell: UITableViewCell {
         var label = UILabel()
         label.font = .systemFont(ofSize: 18)
         label.textColor = .white
-        label.backgroundColor = .black
+        label.backgroundColor = UIColorStyle.bg
         return label
     }()
     
