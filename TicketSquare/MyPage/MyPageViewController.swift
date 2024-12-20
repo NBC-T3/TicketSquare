@@ -8,88 +8,215 @@
 import UIKit
 import SnapKit
 
+
 class MyPageViewController: UIViewController {
     
-    private var tickets: [Ticket] = []
+    private var userInfo: UserInfo?
     
-    private let editButton: UIButton = {
-        let button = makeButton("개인정보 변경")
-        
-        return button
-    }()
+    private var tickets: [Ticket] = []
     
     private let ticketTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColorStyle.bg
+        tableView.layer.cornerRadius = 10
+        tableView.separatorInset = .init(top: 10, left: 0, bottom: 0, right: 0)
         return tableView
     }()
     
-    private let logOutButton: UIButton = {
-        let button = makeButton("로그아웃")
+    private lazy var profileImageButton: UIButton = {
+        let button = UIButton()
+
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.clipsToBounds = true
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(setProfileImage), for: .touchUpInside)
         
         return button
     }()
     
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        
+        return stackView
+    }()
+    
+    private let nameLabel: UILabel = {
+        let label = profileLabel()
+        
+        return label
+    }()
+    
+    private let birthDateLabel: UILabel = {
+        let label = profileLabel()
+        
+        return label
+    }()
+    
+    private let phoneNumberLabel: UILabel = {
+        let label = profileLabel()
+        
+        return label
+    }()
+    
+    private static func profileLabel() -> UILabel {
+        let label = UILabel()
+        
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        label.backgroundColor = .clear
+
+        return label
+    }
+    
+    private func saveProfileImage() {
+        guard let profileImage = self.profileImageButton.imageView?.image?.pngData() else { return }
+        UserDefaults.standard.set(profileImage, forKey: UserInfo.Key.profileIamge)
+    }
+    
+    private static func attributeLabel(_ attribute: String) -> UILabel {
+        let label = UILabel()
+        
+        label.font = .systemFont(ofSize: 13)
+        label.textAlignment = .left
+        label.textColor = .lightGray
+        label.numberOfLines = 1
+        label.text = attribute
+        
+        return label
+    }
+    /*
+     이름
+     생년월일
+     전화번호
+     아이디
+     비밀번호
+     */
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = UIColorStyle.bg
         configureUI()
         configureTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureData()
+        configureProfile()
+        
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveProfileImage()
+        self.navigationController?.navigationBar.isHidden = false
+    }
+    
     private func configureData() {
         let tickets = TicketManager().read()
+
         self.tickets = tickets
+        ticketTableView.reloadData()
     }
     
     private func configureUI() {
-        
         [
-            editButton,
-            ticketTableView,
-            logOutButton
+            profileImageButton,
+            stackView,
+            ticketTableView
         ].forEach { view.addSubview($0) }
         
-        editButton.snp.makeConstraints {
-            $0.top.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+        let name = Self.attributeLabel("이름")
+//        name.backgroundColor =
+        let birth = Self.attributeLabel("생년월일")
+//        birth.backgroundColor = .systemGray5
+        let phoneNumber = Self.attributeLabel("전화번호")
+//        phoneNumber.backgroundColor = .systemGray6
+        
+        
+        [   name,
+            nameLabel,
+            birth,
+            birthDateLabel,
+            phoneNumber,
+            phoneNumberLabel
+        ].forEach { stackView.addArrangedSubview($0) }
+        
+        profileImageButton.snp.makeConstraints {
+            $0.bottom.equalTo(ticketTableView.snp.top).offset(-30)
+//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.leading/*.top*/.equalTo(view.safeAreaLayoutGuide).inset(20)
+            $0.width.equalTo(160)
+            $0.height.equalTo(200)
         }
         
-        logOutButton.snp.makeConstraints {
-            $0.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+        stackView.snp.makeConstraints {
+            $0.leading.equalTo(profileImageButton.snp.trailing).offset(60)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            $0.bottom.equalTo(ticketTableView.snp.top).offset(-30)
+            $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.25)
         }
         
         ticketTableView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(editButton.snp.bottom).offset(20)
-            $0.bottom.equalTo(logOutButton.snp.top).offset(-20)
+            $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.6)
+            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        
+        [
+            nameLabel,
+            birthDateLabel,
+            phoneNumberLabel
+        ].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(30)
+            }
         }
         
     }
     
-    private static func makeButton(_ title: String) -> UIButton {
-        let button = UIButton()
+    private func configureProfile() {
+        guard let userInfo = UserInfo.readDefault() else { return }
+        self.userInfo = userInfo
         
-        button.setTitle(title, for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.1)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18)
+        nameLabel.text = userInfo.name
+        birthDateLabel.text = userInfo.birth
+        phoneNumberLabel.text = userInfo.phoneNumber
         
-        button.snp.makeConstraints {
-            $0.width.equalTo(120)
-            $0.height.equalTo(35)
+        if let data = userInfo.profileImage,
+           let image = UIImage(data: data) {
+            profileImageButton.setImage(image, for: .normal)
         }
-        
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        button.layer.borderWidth = 1
-        
-        return button
     }
+    
 }
 
+
+extension MyPageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @objc private func setProfileImage(_ sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: false)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: false) { () in
+            let pickedImage = info[.originalImage] as? UIImage
+            self.profileImageButton.setImage(pickedImage, for: UIControl.State.normal)
+        }
+    }
+}
 
 extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -116,7 +243,7 @@ extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        120
+        180
     }
     
 }

@@ -40,4 +40,9 @@ struct TicketManager {
         
         UserDefaults.standard.set(nsDatas, forKey: Self.key)
     }
+    
+    func reset() {
+        let nsDatas = [NSData]()
+        UserDefaults.standard.set(nsDatas, forKey: Self.key)
+    }
 }

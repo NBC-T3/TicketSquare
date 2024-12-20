@@ -40,8 +40,8 @@ class TicketingStepper: UIView {
         
         stackView.clipsToBounds = true
         stackView.layer.cornerRadius = 8
-        stackView.layer.borderWidth = 1
-        stackView.layer.borderColor = UIColor.white.cgColor
+//        stackView.layer.borderWidth = 1
+//        stackView.layer.borderColor = UIColor.white.cgColor
         
         return stackView
     }()
@@ -75,14 +75,14 @@ class TicketingStepper: UIView {
         
         label.font = .systemFont(ofSize: 20)
         label.textAlignment = .center
-        label.backgroundColor = .black
-        label.textColor = .white
+        label.backgroundColor = .lightGray
+        label.textColor = .black
         
-        label.layer.cornerRadius = 2
+        label.layer.cornerRadius = 5
         label.clipsToBounds = true
         
         label.layer.borderWidth = 1
-        label.layer.borderColor = UIColor.white.cgColor
+        label.layer.borderColor = UIColorStyle.bg.cgColor
         return label
     }()
     

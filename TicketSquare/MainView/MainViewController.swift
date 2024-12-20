@@ -67,10 +67,13 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
         setupViews()  // 뷰 구성하는 메서드 호출
         fetchMovies()  // 영화 데이터를 가져오는 메서드 호출
         startAutoScroll()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func startAutoScroll() {
@@ -225,7 +228,7 @@ class MainViewController: UIViewController {
         
         // 섹션 여백 설정
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0, leading: 10, bottom: 0, trailing: 10)
+            top: 20, leading: 10, bottom: 20, trailing: 10)
         
         // 아이템 사이의 간격 설정
         section.interGroupSpacing = 15  // 그룹 사이 간격 설정
