@@ -2,6 +2,15 @@
 
 영화 예매 서비스 iOS 애플리케이션입니다. TMDB API를 활용하여 영화 정보를 제공하고, 예매 기능을 구현했습니다.
 
+## 🙆‍♂️ 팀원 
+|<a href="https://github.com/0-jerry"><img src="https://private-avatars.githubusercontent.com/u/120617542?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjQ4MDAsIm5iZiI6MTczNDY2MzYwMCwicGF0aCI6Ii91LzEyMDYxNzU0MiJ9.qvb0Ftgvyjvm4h_MOAdUG9IVhBUzsx4JhggZ5RnMtn8&v=4&size=64" width=150></a>|<a href="https://github.com/kangminseoung"><img src="https://private-avatars.githubusercontent.com/u/185740758?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjQ4MDAsIm5iZiI6MTczNDY2MzYwMCwicGF0aCI6Ii91LzE4NTc0MDc1OCJ9.2vLzzwSD1QxIdOtaDRVLM1h-jQmajc6UWo3Mwo3U2dc&v=4" width=150></a>|<a href="https://github.com/AhnJunGyung"><img src="https://private-avatars.githubusercontent.com/u/84224280?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU2NDAsIm5iZiI6MTczNDY2NDQ0MCwicGF0aCI6Ii91Lzg0MjI0MjgwIn0.mKHonvd5c2fGNimAqKdZpq5i-NDRVrQNtvtZEQn7Fwc&s=96&v=4" width=150></a>|<a href="https://github.com/Quaker-Lee"><img src="https://private-avatars.githubusercontent.com/u/106296018?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU3MDAsIm5iZiI6MTczNDY2NDUwMCwicGF0aCI6Ii91LzEwNjI5NjAxOCJ9.-eAzkU8AsyZe4UwBz8v0FoYarYADjjURQg_vQlBxA0o&s=96&v=4" width=150></a>|<a href="https://github.com/HwangSeokBeom"><img src="https://private-avatars.githubusercontent.com/u/49748207?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU1MjAsIm5iZiI6MTczNDY2NDMyMCwicGF0aCI6Ii91LzQ5NzQ4MjA3In0.lXLW9g0RLkzTM5u8s-haiYYnQdotwk_udryYl_ujuQg&s=96&v=4" width=150></a>|
+|:---:|:---:|:---:|:---:|:---:|
+|이재영(팀장)|강민성|안준경|이재건|황석범|
+|예매 페이지, 마이 페이지|메인 페이지|검색 페이지|로그인 페이지|API 매니저, 탭 바, 세부 페이지|
+
+<br/>
+<br/>
+
 ## 📱 주요 기능
 
 ### 1. 메인 화면
