@@ -10,23 +10,21 @@ import SnapKit
 
 class SearchView: UIView {
     
-    //MARK: 검색바
-    private let searchBar: UISearchBar = {
-        var searchBar = UISearchBar()
-        searchBar.tintColor = .red
-        searchBar.placeholder = "영화를 검색해보세요."
-        searchBar.searchTextField.font = .systemFont(ofSize: 18)
-        searchBar.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
-        return searchBar
-    }()
+    private let searchBarTappedStatus = false//서치바 상태
     
-    let searchButton: UIButton = {
-        var button = UIButton()
-        button.setTitle("검색", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 15
-        return button
+    //MARK: 검색바
+    let searchBar: UISearchBar = {
+        var searchBar = UISearchBar()
+        searchBar.tintColor = .white
+        searchBar.searchBarStyle = .minimal//서치바 테두리 제거
+        searchBar.placeholder = "영화 키워드 검색"
+        searchBar.searchTextField.font = .systemFont(ofSize: 18)
+        searchBar.backgroundColor = .gray
+        searchBar.layer.cornerRadius = 10
+        searchBar.backgroundColor = .lightGray
+        searchBar.searchTextField.backgroundColor = .lightGray
+        
+        return searchBar
     }()
     
     //MARK: 메인화면
@@ -87,44 +85,38 @@ class SearchView: UIView {
         backgroundColor = UIColorStyle.bg
         
         addSubview(searchBar)
-        addSubview(searchButton)
         addSubview(titleLabel)
         addSubview(tableView)
         addSubview(collectionView)
         
         searchBar.snp.makeConstraints {
             $0.top.equalTo(safeArea.snp.top)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalTo(searchButton.snp.leading).inset(-10)
+            $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(50)
         }
         
-        searchButton.snp.makeConstraints {
-            $0.centerY.equalTo(searchBar)
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(80)
-            $0.height.equalTo(45)
-        }
-        
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(30)
-            $0.leading.equalTo(safeArea).offset(20)
-            $0.bottom.equalTo(tableView.snp.top).inset(50)
+            $0.top.equalTo(searchBar.snp.bottom).offset(30)
+            $0.leading.equalTo(safeArea).offset(30)
+            $0.height.equalTo(50)
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeArea).offset(140)
-            $0.leading.equalTo(safeArea).inset(20)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(safeArea).offset(-40)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.leading.equalTo(safeArea).inset(40)
+            $0.trailing.equalToSuperview().inset(30)
+            $0.bottom.equalTo(safeArea)
         }
         
         collectionView.snp.makeConstraints{
             $0.top.equalTo(safeArea).offset(140)
             $0.leading.equalTo(safeArea)
             $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(safeArea).offset(-40)
+            $0.bottom.equalTo(safeArea)
         }
     }
+    
+    
+    
     
 }
