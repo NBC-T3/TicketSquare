@@ -57,7 +57,7 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
     private func reset() {
         isSelected = false
         
-        backgroundColor = .white.withAlphaComponent(0.2)
+        backgroundColor = UIColorStyle.bg
         layer.borderColor = UIColor.white.cgColor
 
         startTimeLabel.text = "--:--"
@@ -87,7 +87,7 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
             $0.bottom.trailing.leading.equalToSuperview()
         }
         
-        backgroundColor = .white.withAlphaComponent(0.15)
+        backgroundColor = UIColorStyle.bg
         clipsToBounds = true
         layer.cornerRadius = 10
         layer.borderColor = UIColor.white.cgColor
@@ -115,7 +115,7 @@ final class TicketingTimeCollectionViewCell: UICollectionViewCell {
     // 셀 선택 해제 시
     func didDeselected() {
         
-        backgroundColor = .white.withAlphaComponent(0.15)
+        backgroundColor = UIColorStyle.bg
         startTimeLabel.textColor = .white
         startTimeLabel.font = .systemFont(ofSize: 20)
         

@@ -38,8 +38,8 @@ final class TicketingViewController: UIViewController {
         
         label.text = "title"
         label.textColor = .white
-        label.backgroundColor = .darkGray.withAlphaComponent(0.35)
-        label.font = .boldSystemFont(ofSize: 40)
+//        label.backgroundColor = .darkGray.withAlphaComponent(0.35)
+        label.font = .boldSystemFont(ofSize: 30)
         label.textAlignment = .center
         
         return label
@@ -82,7 +82,7 @@ final class TicketingViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero,
                                               collectionViewLayout: flowLayout)
         
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = UIColorStyle.bg
         collectionView.isScrollEnabled = false
         collectionView.allowsMultipleSelection = false
         
@@ -200,26 +200,22 @@ final class TicketingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBarController?.tabBar.isHidden = true
 
         configureUI()
         configureCollectionView()
         setUpTimeDatas()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.navigationBar.isHidden = false
-        self.tabBarController?.tabBar.backgroundColor = .clear
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = false
         self.tabBarController?.tabBar.isHidden = false
-
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     // 푸터 업데이트
@@ -241,7 +237,7 @@ final class TicketingViewController: UIViewController {
             paymentButton.layer.borderColor = UIColor.lightGray.cgColor
             paymentButton.backgroundColor = .white
         } else {
-            paymentButton.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+            paymentButton.layer.borderColor = UIColor.clear.cgColor
             paymentButton.backgroundColor = .lightGray.withAlphaComponent(0.1)
         }
     }
@@ -256,11 +252,15 @@ extension TicketingViewController {
     // 전체 UI 설정
     private func configureUI() {
         
-        view.backgroundColor = .black
-        
+        view.backgroundColor = UIColorStyle.bg
+        self.navigationController?.navigationBar.backgroundColor = UIColorStyle.bg
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = UIColorStyle.bg
+        self.navigationController?.navigationBar.compactScrollEdgeAppearance?.backgroundColor = UIColorStyle.bg
+        self.navigationController?.navigationBar.standardAppearance.backgroundColor = UIColorStyle.bg
+        self.navigationItem.titleView = self.headerLabel
+        self.navigationController?.navigationBar.tintColor = .white
         
         [
-            headerLabel,
             inputScrollView,
             footerView
         ].forEach { view.addSubview($0)}
@@ -287,19 +287,17 @@ extension TicketingViewController {
         ].forEach { priceStackView.addArrangedSubview($0) }
         
         headerLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().inset(0)
             $0.height.equalTo(80)
         }
         
         footerView.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(30)
             $0.height.equalTo(100)
         }
         
         inputScrollView.snp.makeConstraints {
-            $0.top.equalTo(headerLabel.snp.bottom).offset(20)
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.leading.trailing.equalToSuperview().inset(10)
             $0.bottom.equalTo(footerView.snp.top).offset(-10)
         }

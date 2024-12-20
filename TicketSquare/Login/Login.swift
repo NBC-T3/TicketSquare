@@ -39,6 +39,8 @@ class Login: UIViewController, UITextFieldDelegate {
         $0.keyboardType = .default
         $0.clearButtonMode = .whileEditing
         $0.returnKeyType = .done
+        $0.isSecureTextEntry = true
+        $0.textContentType = .password
     }
     private let loginBtn: UIButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
@@ -111,8 +113,8 @@ class Login: UIViewController, UITextFieldDelegate {
     @objc
     private func loginBtnTapped() {
         //UserDefaults에 저장되어있는 아이디와 비밀번호
-        let checkID = UserDefaults.standard.string(forKey: "ID")
-        let checkPW = UserDefaults.standard.string(forKey: "PW")
+        let checkID = UserDefaults.standard.string(forKey: UserInfo.Key.id)
+        let checkPW = UserDefaults.standard.string(forKey: UserInfo.Key.password)
         
         //사용자가 입력한 아이디와 비밀번호
         let userInputID = id.text

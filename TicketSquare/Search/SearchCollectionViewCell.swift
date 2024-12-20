@@ -14,7 +14,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     //MARK: 셀 구성
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true // 이미지가 셀의 경계를 넘지 않도록 잘라냄
         imageView.layer.cornerRadius = 10 // 셀의 모서리를 둥글게 설정
         imageView.backgroundColor = .lightGray // 이미지 로딩 중에 표시될 배경색
@@ -29,6 +29,7 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .white
         label.text = "title"
         return label
@@ -36,16 +37,21 @@ class SearchCollectionViewCell: UICollectionViewCell {
     
     private let genreLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 12)
         label.textColor = .white
         label.text = "genre"
         return label
     }()
     
+    //셀 재사용 전 이미지 초기화
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = UIImage()
+    }
     
     //MARK: 초기화
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupView()
     }
     
@@ -70,14 +76,17 @@ class SearchCollectionViewCell: UICollectionViewCell {
             $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(160)
+            $0.width.equalTo(120)
         }
         
         titleLabel.snp.makeConstraints{
-            $0.top.equalTo(imageView.snp.bottom).offset(2)
+            $0.top.equalTo(imageView.snp.bottom).offset(5)
+            $0.width.equalTo(120)
         }
         
         genreLabel.snp.makeConstraints{
-            $0.top.equalTo(titleLabel.snp.bottom).offset(2)
+            $0.top.equalTo(titleLabel.snp.bottom)
+            $0.width.equalTo(120)
         }
         
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
@@ -87,15 +96,18 @@ class SearchCollectionViewCell: UICollectionViewCell {
     @objc private func buttonTapped() {
         //TODO: 상세페이지 이동
     }
-    
-    var buttonAction: (() -> Void)?
 
     //MARK: 이미지 세팅 메소드
-    func configure(_ urlString: String) {
-        fetchImage(urlString)//이미지 호출
+    func configure(_ movie: MovieDetails) {
+        
+        let urlString = APIManager.shared.getImageURL(for: movie.posterPath ?? "")
+        fetchImage(urlString)//이미지 호출 & 이미지뷰 세팅
+        
+        titleLabel.text = movie.title
+        genreLabel.text = movie.genresDescribing()
     }
     
-    //MARK: 이미지 호출 - READ
+    //MARK: 이미지 fetch
     private func fetchImage(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         let request = URLRequest(url: url)
