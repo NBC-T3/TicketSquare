@@ -161,8 +161,8 @@ class MyPageViewController: UIViewController {
         }
         
         stackView.snp.makeConstraints {
-            $0.leading.equalTo(profileImageButton.snp.trailing).offset(60)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            $0.leading.equalTo(profileImageButton.snp.trailing).offset(20)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
             $0.bottom.equalTo(ticketTableView.snp.top).offset(-30)
             $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.25)
         }
