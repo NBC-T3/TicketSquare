@@ -1,25 +1,32 @@
 # 🎬 TicketSquare (티켓스퀘어)
 
-영화 예매 서비스 iOS 애플리케이션입니다. TMDB API를 활용하여 영화 정보를 제공하고, 예매 기능을 구현했습니다.
+영화 예매 서비스 iOS 애플리케이션입니다.  
+[TMDB API](https://developer.themoviedb.org/docs/getting-started)를 활용하여 영화 정보를 제공하고, 예매 기능을 구현했습니다.
+<br/>
 
 ## 🙆‍♂️ 팀원
 
-|<a href="https://github.com/0-jerry"><img src="https://private-avatars.githubusercontent.com/u/120617542?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU3MDAsIm5iZiI6MTczNDY2NDUwMCwicGF0aCI6Ii91LzEyMDYxNzU0MiJ9.UcnE8_EsJB4Spn-8LNeXW_Ps7K3jj7EwUVosBAQGqEU&v=4" width=150></a>|<a href="https://github.com/kangminseoung"><img src="https://private-avatars.githubusercontent.com/u/185740758?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjU3MDAsIm5iZiI6MTczNDY2NDUwMCwicGF0aCI6Ii91LzE4NTc0MDc1OCJ9.yPOymdi5S8hJ1Ig1JaXt0MVTqgEgJxbD8MQnBSrPdd4&v=4" width=150></a>|<a href="https://github.com/AhnJunGyung"><img src="https://private-avatars.githubusercontent.com/u/84224280?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY1NDAsIm5iZiI6MTczNDY2NTM0MCwicGF0aCI6Ii91Lzg0MjI0MjgwIn0.MMaXGzpVA81QndgoQ-UV1GY_14uAXXF95MKYG6m7Hlc&v=4" width=150></a>|<a href="https://github.com/Quaker-Lee"><img src="https://private-avatars.githubusercontent.com/u/106296018?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY2MDAsIm5iZiI6MTczNDY2NTQwMCwicGF0aCI6Ii91LzEwNjI5NjAxOCJ9._9IbUBJuKNROBs9FBajLWPnXkszd6vhm21OCOQF60LE&v=4" width=150></a>|<a href="https://github.com/HwangSeokBeom"><img src="https://private-avatars.githubusercontent.com/u/49748207?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MzQ2NjY0MjAsIm5iZiI6MTczNDY2NTIyMCwicGF0aCI6Ii91LzQ5NzQ4MjA3In0._4Wt-Cjc6yrbJHGvUUBzyflNTPohq-cI3CJ55ibadeU&v=4" width=150></a>|
+| [![이재영](https://avatars.githubusercontent.com/u/120617542?v=4)](https://github.com/0-jerry) | [![강민성](https://avatars.githubusercontent.com/u/185740758?v=4)](https://github.com/kangminseoung) | [![안준경](https://avatars.githubusercontent.com/u/84224280?v=4)](https://github.com/AhnJunGyung) | [![이재건](https://avatars.githubusercontent.com/u/106296018?v=4)](https://github.com/Quaker-Lee) | [![황석범](https://avatars.githubusercontent.com/u/49748207?v=4)](https://github.com/HwangSeokBeom) |
 |:---:|:---:|:---:|:---:|:---:|
-|<a href="https://github.com/0-jerry">이재영</a>(팀장)|<a href="https://github.com/kangminseoung">강민성</a>|<a href="https://github.com/AhnJunGyung">안준경</a>|<a href="https://github.com/Quaker-Lee">이재건</a>|<a href="https://github.com/HwangSeokBeom">황석범</a>|
-|예매 페이지<br/>마이 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바, 세부 페이지|
-<br/>
+|[이재영](https://github.com/0-jerry) (팀장)|[강민성](https://github.com/kangminseoung)|[안준경](https://github.com/AhnJunGyung)|[이재건](https://github.com/Quaker-Lee)|[황석범](https://github.com/HwangSeokBeom)|
+|마이 페이지<br/>예매 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바 & 세부 페이지|
 
+
+### [팀 노션](https://teamsparta.notion.site/No-3-269781f2135446e3aaea2a5920076297) / [와이어프레임](https://www.figma.com/design/18WrcQASOqMLtVMIOC5YtC/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&p=f&t=4VACHRjkRL623NRa-0)
+
+<br/>
 <br/>
 
 ## 🎥 시연 영상
-39
 |<img src="https://github.com/user-attachments/assets/ba66960e-588b-4a16-9081-778a7a3833c3" width="66%">|<img src="https://github.com/user-attachments/assets/c88ca288-76fb-42e5-8203-1ddcb81994fd" width="66%">|<img src="https://github.com/user-attachments/assets/b6e38e12-2eb9-4ed4-afda-ccaa1f726b73" width="66%">|
 |:---:|:---:|:---:|
 |로그인 & 마이페이지|메인 & 예매|검색|
 
+<br/>
+<br/>
 
 ## 📱 주요 기능
+<br/>
 
 ### 1. 메인 화면
 - 인기 영화 자동 슬라이드 배너
@@ -47,6 +54,8 @@
 - 예매 내역 확인
 - 프로필 이미지 설정
 
+<br/>
+<br/>
 
 ## 📋 구현 내용
 
@@ -69,6 +78,10 @@
 - 스크롤 애니메이션
 - 실시간 가격 계산
 - 직관적인 예매 프로세스
+
+<br/>
+<br/>
+
 
 ## 🔑 주요 클래스 설명
 
@@ -97,12 +110,18 @@
 - 검색 결과의 실시간 업데이트
 - 그리드/리스트 뷰 전환
 
+<br/>
+<br/>
+
+
 ## 🎨 디자인 패턴
 
 - **Singleton Pattern**: `APIManager`, `TicketManager`에서 사용
 - **Delegate Pattern**: 테이블뷰, 컬렉션뷰, 검색바 구현에 활용
 - **Observer Pattern**: 데이터 바인딩에 활용
 - **MVC Pattern**: 뷰와 비즈니스 로직의 분리
+
+<br/>
 
 ## 🛠 기술 스택
 
@@ -113,6 +132,8 @@
 - **유틸리티**: `Then (3.0.0)`
 - **API**: `TMDB API`
 - **데이터 저장**: `UserDefaults`
+
+<br/>
 
 ## 📁 프로젝트 구조
 
