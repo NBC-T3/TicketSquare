@@ -10,7 +10,7 @@
 | <img src="https://avatars.githubusercontent.com/u/120617542?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/185740758?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/84224280?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/106296018?v=4" width="100" height="100"> | <img src="https://avatars.githubusercontent.com/u/49748207?v=4" width="100" height="100"> |
 |:---:|:---:|:---:|:---:|:---:|
 |[이재영](https://github.com/0-jerry) (팀장)|[강민성](https://github.com/kangminseoung)|[안준경](https://github.com/AhnJunGyung)|[이재건](https://github.com/Quaker-Lee)|[황석범](https://github.com/HwangSeokBeom)|
-|예매 페이지,<br/>마이 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바, 세부 페이지|
+|마이 페이지<br/>예매 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바 & 세부 페이지|
 
 <br/>
 <br/>
