@@ -12,6 +12,10 @@
 |[이재영](https://github.com/0-jerry) (팀장)|[강민성](https://github.com/kangminseoung)|[안준경](https://github.com/AhnJunGyung)|[이재건](https://github.com/Quaker-Lee)|[황석범](https://github.com/HwangSeokBeom)|
 |마이 페이지<br/>예매 페이지|메인 페이지|검색 페이지|로그인 페이지<br/>회원가입|API 매니저<br/>탭 바 & 세부 페이지|
 
+
+[팀 노션](https://teamsparta.notion.site/No-3-269781f2135446e3aaea2a5920076297) | 
+[와이어프레임](https://www.figma.com/design/18WrcQASOqMLtVMIOC5YtC/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&p=f&t=4VACHRjkRL623NRa-0)
+
 <br/>
 <br/>
 
