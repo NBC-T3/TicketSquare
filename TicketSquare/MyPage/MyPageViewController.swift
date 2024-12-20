@@ -18,18 +18,22 @@ class MyPageViewController: UIViewController {
     private let ticketTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColorStyle.bg
+        tableView.layer.cornerRadius = 10
+        tableView.separatorInset = .init(top: 10, left: 0, bottom: 0, right: 0)
         return tableView
     }()
     
-    private let profileImage: UIImageView = {
-        let imageView = UIImageView()
+    private lazy var profileImageButton: UIButton = {
+        let button = UIButton()
+
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.clipsToBounds = true
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(setProfileImage), for: .touchUpInside)
         
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(systemName: "person.circle")
-        imageView.layer.cornerRadius = 75
-        
-        
-        return imageView
+        return button
     }()
     
     private let stackView: UIStackView = {
@@ -67,8 +71,13 @@ class MyPageViewController: UIViewController {
         label.textAlignment = .left
         label.numberOfLines = 1
         label.backgroundColor = .clear
-        
+
         return label
+    }
+    
+    private func saveProfileImage() {
+        guard let profileImage = self.profileImageButton.imageView?.image?.pngData() else { return }
+        UserDefaults.standard.set(profileImage, forKey: UserInfo.Key.profileIamge)
     }
     
     private static func attributeLabel(_ attribute: String) -> UILabel {
@@ -102,13 +111,14 @@ class MyPageViewController: UIViewController {
         super.viewWillAppear(animated)
         configureData()
         configureProfile()
-
+        
         self.tabBarController?.tabBar.isHidden = false
         self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        saveProfileImage()
         self.navigationController?.navigationBar.isHidden = false
     }
     
@@ -121,34 +131,45 @@ class MyPageViewController: UIViewController {
     
     private func configureUI() {
         [
-            profileImage,
+            profileImageButton,
             stackView,
             ticketTableView
         ].forEach { view.addSubview($0) }
         
-        [   Self.attributeLabel("이름"),
+        let name = Self.attributeLabel("이름")
+//        name.backgroundColor =
+        let birth = Self.attributeLabel("생년월일")
+//        birth.backgroundColor = .systemGray5
+        let phoneNumber = Self.attributeLabel("전화번호")
+//        phoneNumber.backgroundColor = .systemGray6
+        
+        
+        [   name,
             nameLabel,
-            Self.attributeLabel("생년월일"),
+            birth,
             birthDateLabel,
-            Self.attributeLabel("전화번호"),
+            phoneNumber,
             phoneNumberLabel
         ].forEach { stackView.addArrangedSubview($0) }
         
-        profileImage.snp.makeConstraints {
-            $0.leading.top.equalTo(view.safeAreaLayoutGuide).inset(40)
-            $0.width.equalTo(120)
-            $0.height.equalTo(stackView)
+        profileImageButton.snp.makeConstraints {
+            $0.bottom.equalTo(ticketTableView.snp.top).offset(-30)
+//            $0.top.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.leading/*.top*/.equalTo(view.safeAreaLayoutGuide).inset(20)
+            $0.width.equalTo(160)
+            $0.height.equalTo(200)
         }
         
         stackView.snp.makeConstraints {
-            $0.leading.equalTo(profileImage.snp.trailing).offset(60)
-            $0.trailing.top.equalTo(view.safeAreaLayoutGuide).inset(30)
+            $0.leading.equalTo(profileImageButton.snp.trailing).offset(60)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            $0.bottom.equalTo(ticketTableView.snp.top).offset(-30)
             $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.25)
         }
         
         ticketTableView.snp.makeConstraints {
             $0.height.equalTo(view.safeAreaLayoutGuide).multipliedBy(0.6)
-            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         
         [
@@ -173,12 +194,29 @@ class MyPageViewController: UIViewController {
         
         if let data = userInfo.profileImage,
            let image = UIImage(data: data) {
-            profileImage.image = image
+            profileImageButton.setImage(image, for: .normal)
         }
     }
     
 }
 
+
+extension MyPageViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @objc private func setProfileImage(_ sender: UIButton) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: false)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: false) { () in
+            let pickedImage = info[.originalImage] as? UIImage
+            self.profileImageButton.setImage(pickedImage, for: UIControl.State.normal)
+        }
+    }
+}
 
 extension MyPageViewController: UITableViewDataSource, UITableViewDelegate {
     

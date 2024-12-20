@@ -186,10 +186,11 @@ extension Ticket {
         var description: String {
             let adult: String? = adult != 0 ? "일반 \(adult)명" : nil
             let minor: String? = minor != 0 ? "청소년 \(minor)명" : nil
-            let price = PriceFormatter.won(totalPrice)
-            let peopleString = [adult, minor].compactMap { $0 }.joined(separator: ", ")
+            let peopleString = [adult, minor]
+                .compactMap { $0 }
+                .joined(separator: ", ")
             
-            return [peopleString, price].joined(separator: " / ")
+            return peopleString
         }
         
         var totalPrice: Int {

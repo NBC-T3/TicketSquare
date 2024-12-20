@@ -47,7 +47,7 @@ class TicketTableViewCell: UITableViewCell {
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-
+        
         label.font = .systemFont(ofSize: 14)
         label.backgroundColor = .clear
         label.textColor = .white
@@ -77,19 +77,18 @@ class TicketTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     private func configureUI() {
-        backgroundColor = .white.withAlphaComponent(0.07)
+        backgroundColor = .darkText
         layer.borderColor = UIColor.white.withAlphaComponent(0.03).cgColor
         layer.borderWidth = 2
         
         [
             posterImageView,
+            titleLabel,
             stackView
         ].forEach { addSubview($0) }
         
         [
-            titleLabel,
             timeLabel,
             peopleCountLabel
         ].forEach { stackView.addArrangedSubview($0) }
@@ -100,11 +99,18 @@ class TicketTableViewCell: UITableViewCell {
             $0.width.equalTo(140)
         }
         
-        stackView.snp.makeConstraints {
-            $0.top.bottom.trailing.equalToSuperview().inset(20)
-            $0.leading.equalTo(posterImageView.snp.trailing).offset(10)
+        
+        titleLabel.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview().inset(20)
+            $0.leading.equalTo(posterImageView.snp.trailing).offset(20)
         }
+
+        stackView.snp.makeConstraints {
+            $0.bottom.trailing.equalToSuperview().inset(20)
+        }
+        
     }
+    
     
     func configure(_ ticket: Ticket) {
         self.ticket = ticket
